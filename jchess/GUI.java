@@ -84,11 +84,12 @@ public class GUI
         return true;
     }
 
+    // TODO: Remove this! We can use relative path instead absolute ones.
     static String getJarPath()
     {
         String path = GUI.class.getProtectionDomain().getCodeSource().getLocation().getFile();
         path = path.replaceAll("[a-zA-Z0-9%!@#$%^&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar", "");
-        int lastSlash = path.lastIndexOf(File.separator); 
+        int lastSlash = path.lastIndexOf(File.separator);
         if(path.length()-1 == lastSlash)
         {
             path = path.substring(0, lastSlash);

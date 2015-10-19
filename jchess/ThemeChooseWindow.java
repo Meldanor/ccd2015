@@ -20,16 +20,17 @@
  */
 package jchess;
 
-import java.awt.*;
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Properties;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import java.nio.file.Paths;
+import java.util.Properties;
 
 public class ThemeChooseWindow extends JDialog implements ActionListener, ListSelectionListener
 {
@@ -46,7 +47,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     {
         super(parent);
 
-        File dir = new File(GUI.getJarPath() + File.separator + "theme"+File.separator);
+        File dir = getThemeRoot();
 
         System.out.println("Theme path: "+dir.getPath());
 
@@ -60,7 +61,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             this.setSize(winDim);
             this.setResizable(false);
             this.setLayout(null);
-            this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);            
+            this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             String[] dirNames = new String[files.length];
             for (int i = 0; i < files.length; i++)
             {
@@ -73,7 +74,7 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
             this.themesList.setSelectionMode(0);
             this.themesList.addListSelectionListener(this);
             Properties prp = GUI.getConfigFile();
-            
+
             this.gbl = new GridBagLayout();
             this.gbc = new GridBagConstraints();
             try
@@ -109,16 +110,18 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
     public void valueChanged(ListSelectionEvent event)
     {
         String element = this.themesList.getModel().getElementAt(this.themesList.getSelectedIndex()).toString();
-        String path = GUI.getJarPath() + File.separator + "theme/";
-        //String path  = JChessApp.class.getResource("theme/").getPath().toString();
-        System.out.println(path + element + "/images/Preview.png");
-        this.themePreview = new ImageIcon(path + element + "/images/Preview.png");
+        File root;
+        try {
+            root = getThemeRoot();
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(JChessApp.getApplication().getMainFrame(), e.getMessage());
+            return;
+        }
+        File previewFile = Paths.get(root.getAbsolutePath(), element, "images", "Preview.png").toFile();
+        this.themePreview = new ImageIcon(previewFile.getAbsolutePath());
         this.themePreviewButton.setIcon(this.themePreview);
     }
 
-    /** Method wich is changing a pawn into queen, rook, bishop or knight
-     * @param arg0 Capt information about performed action
-     */
     public void actionPerformed(ActionEvent evt)
     {
         if (evt.getSource() == this.okButton)
@@ -145,6 +148,21 @@ public class ThemeChooseWindow extends JDialog implements ActionListener, ListSe
 
             }
             System.out.print(prp.getProperty("THEME"));
+        }
+    }
+
+    private File getThemeRoot() throws FileNotFoundException {
+        File root = new File("theme");
+        if (root.exists() && root.isDirectory())
+            return root;
+        else {
+            root =  Paths.get("jchess", "theme").toFile();
+
+            if (!root.exists() ||!root.isDirectory()) {
+                throw new FileNotFoundException("Can't find the theme folder in " + new File("theme").getAbsolutePath() + " or " + root.getAbsolutePath());
+            } else
+                return root;
+
         }
     }
 }
