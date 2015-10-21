@@ -126,8 +126,8 @@ public class Pawn extends Piece {
                 }
             }
 
-            //TODO: magic nubers
-            if ((player.goDown && this.square.pozY == 1) || (!player.goDown && this.square.pozY == 6)) {
+            //TODO: magic numbers
+            //if ((player.goDown && this.square.pozY == 1) || (!player.goDown && this.square.pozY == 6)) {
                 sq1 = chessboard.squares[this.square.pozX][second];
 
                 if (sq1.piece == null) {
@@ -144,7 +144,7 @@ public class Pawn extends Piece {
                         }
                     }
                 }
-            }
+            //}
         }
 
         if (!this.isout(this.square.pozX - 1, this.square.pozY)) //out of bounds protection
