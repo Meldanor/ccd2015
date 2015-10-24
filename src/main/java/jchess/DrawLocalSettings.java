@@ -20,18 +20,17 @@
 package jchess;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.TextListener;
-import java.awt.event.TextEvent;
-import java.awt.*;
 import javax.swing.text.BadLocationException;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.TextEvent;
+import java.awt.event.TextListener;
 
 /**
  * Class responsible for drawing the fold with local game settings
  */
-public class DrawLocalSettings extends JPanel implements ActionListener, TextListener
-{
+public class DrawLocalSettings extends JPanel implements ActionListener, TextListener {
 
     JDialog parent;//needet to close newGame window
     JComboBox color;//to choose color of player
@@ -54,85 +53,73 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
     JCheckBox timeGame;
     JComboBox time4Game;
     String colors[] =
-    {
-        Settings.lang("white"), Settings.lang("black")
-    };
+        {
+            Settings.lang("white"), Settings.lang("black")
+        };
     String times[] =
-    {
-        "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"
-    };
+        {
+            "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"
+        };
 
     ;
-        
-        
-    /** Method witch is checking correction of edit tables
+
+
+    /**
+     * Method witch is checking correction of edit tables
+     *
      * @param e Object where is saving this what contents edit tables
-    */
-    public void textValueChanged(TextEvent e)
-    {
+     */
+    public void textValueChanged(TextEvent e) {
         Object target = e.getSource();
-        if (target == this.firstName || target == this.secondName)
-        {
+        if (target == this.firstName || target == this.secondName) {
             JTextField temp = new JTextField();
-            if (target == this.firstName)
-            {
+            if (target == this.firstName) {
                 temp = this.firstName;
-            }
-            else if (target == this.secondName)
-            {
+            } else if (target == this.secondName) {
                 temp = this.secondName;
             }
 
             int len = temp.getText().length();
-            if (len > 8)
-            {
-                try
-                {
+            if (len > 8) {
+                try {
                     temp.setText(temp.getText(0, 7));
-                }
-                catch (BadLocationException exc)
-                {
+                } catch (BadLocationException exc) {
                     System.out.println("Something wrong in editables: \n" + exc);
                 }
             }
         }
     }
 
-    /** Method responsible for changing the options which can make a player
+    /**
+     * Method responsible for changing the options which can make a player
      * when he want to start new local game
+     *
      * @param e where is saving data of performed action
      */
-    public void actionPerformed(ActionEvent e)
-    {
-        Object target = e.getSource(); 
+    public void actionPerformed(ActionEvent e) {
+        Object target = e.getSource();
         if (target == this.oponentComp) //toggle enabled of controls depends of oponent (if computer)
         {
             this.computerLevel.setEnabled(true);//enable level of computer abilities
             this.secondName.setEnabled(false);//disable field with name of player2
-        }
-        else if (target == this.oponentHuman) //else if oponent will be HUMAN
+        } else if (target == this.oponentHuman) //else if oponent will be HUMAN
         {
             this.computerLevel.setEnabled(false);//disable level of computer abilities
             this.secondName.setEnabled(true);//enable field with name of player2
-        }
-        else if (target == this.okButton) //if clicked OK button (on finish)
+        } else if (target == this.okButton) //if clicked OK button (on finish)
         {
-            if (this.firstName.getText().length() > 9)
-            {//make names short to 10 digits
+            if (this.firstName.getText().length() > 9) {//make names short to 10 digits
                 this.firstName.setText(this.trimString(firstName, 9));
             }
-            if (this.secondName.getText().length() > 9)
-            {//make names short to 10 digits
+            if (this.secondName.getText().length() > 9) {//make names short to 10 digits
                 this.secondName.setText(this.trimString(secondName, 9));
             }
             if (!this.oponentComp.isSelected()
-                    && (this.firstName.getText().length() == 0 || this.secondName.getText().length() == 0))
-            {
+                && (this.firstName.getText().length() == 0 || this.secondName.getText().length() == 0)) {
                 JOptionPane.showMessageDialog(this, Settings.lang("fill_names"));
                 return;
             }
-            if ((this.oponentComp.isSelected() && this.firstName.getText().length() == 0))
-            {
+            if ((this.oponentComp.isSelected() && this.firstName.getText().length() == 0)) {
                 JOptionPane.showMessageDialog(this, Settings.lang("fill_name"));
                 return;
             }
@@ -146,8 +133,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             {
                 pl1.setName(this.firstName.getText());//set name of player
                 pl2.setName(this.secondName.getText());//set name of player
-            }
-            else //else change names
+            } else //else change names
             {
                 pl2.setName(this.firstName.getText());//set name of player
                 pl1.setName(this.secondName.getText());//set name of player
@@ -160,11 +146,9 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
                 pl2.setType(Player.playerTypes.computer);
             }
             if (this.upsideDown.isSelected()) //if upsideDown is checked
-            { 
-                sett.upsideDown = true;
-            }
-            else
             {
+                sett.upsideDown = true;
+            } else {
                 sett.upsideDown = false;
             }
             if (this.timeGame.isSelected()) //if timeGame is checked
@@ -179,8 +163,8 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             System.out.println(this.time4Game.getActionCommand());
             //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
             System.out.println("****************\nStarting new game: " + pl1.name + " vs. " + pl2.name
-                    + "\ntime 4 game: " + sett.timeForGame + "\ntime limit set: " + sett.timeLimitSet
-                    + "\nwhite on top?: " + sett.upsideDown + "\n****************");//4test
+                + "\ntime 4 game: " + sett.timeForGame + "\ntime limit set: " + sett.timeLimitSet
+                + "\nwhite on top?: " + sett.upsideDown + "\n****************");//4test
             newGUI.newGame();//start new Game
             this.parent.setVisible(false);//hide parent
             newGUI.chessboard.repaint();
@@ -189,8 +173,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
 
     }
 
-    DrawLocalSettings(JDialog parent)
-    {
+    DrawLocalSettings(JDialog parent) {
         super();
         //this.setA//choose oponent
         this.parent = parent;
@@ -286,19 +269,16 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
 
     /**
      * Method responsible for triming white symbols from strings
-     * @param txt Where is capt value to equal
+     *
+     * @param txt    Where is capt value to equal
      * @param length How long is the string
      * @return result trimmed String
      */
-    public String trimString(JTextField txt, int length)
-    {
+    public String trimString(JTextField txt, int length) {
         String result = new String();
-        try
-        {
+        try {
             result = txt.getText(0, length);
-        }
-        catch (BadLocationException exc)
-        {
+        } catch (BadLocationException exc) {
             System.out.println("Something wrong in editables: \n" + exc);
         }
         return result;

@@ -21,28 +21,24 @@
 package jchess;
 
 import java.awt.*;
-import java.net.*;
-import java.io.*;
-import java.io.InputStreamReader;
-import javax.swing.*;
-import javax.swing.JPanel;
-import java.io.IOException;
-import java.util.Properties;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Properties;
 
-/** Class representing the game interface which is seen by a player and
+/**
+ * Class representing the game interface which is seen by a player and
  * where are lockated available for player opptions, current games and where
  * can he start a new game (load it or save it)
  */
-public class GUI
-{
+public class GUI {
 
     public Game game;
     static final public Properties configFile = GUI.getConfigFile();
 
-    public GUI()
-    {
+    public GUI() {
         this.game = new Game();
 
         //this.drawGUI();
@@ -53,25 +49,20 @@ public class GUI
      * @returns  : image or null if cannot load
      * */
 
-    static Image loadImage(String name)
-    {
-        if (configFile == null)
-        {
+    static Image loadImage(String name) {
+        if (configFile == null) {
             return null;
         }
         Image img = null;
         URL url = null;
         Toolkit tk = Toolkit.getDefaultToolkit();
-        try
-        {
+        try {
             String imageLink = "theme/" + configFile.getProperty("THEME", "default") + "/images/" + name;
             System.out.println(configFile.getProperty("THEME"));
             url = JChessApp.class.getResource(imageLink);
             img = tk.getImage(url);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("some error loading image!");
             e.printStackTrace();
         }
@@ -79,54 +70,40 @@ public class GUI
     }/*--endOf-loadImage--*/
 
 
-    static boolean themeIsValid(String name)
-    {
+    static boolean themeIsValid(String name) {
         return true;
     }
 
-    static String getJarPath()
-    {
+    static String getJarPath() {
         String path = GUI.class.getProtectionDomain().getCodeSource().getLocation().getFile();
         path = path.replaceAll("[a-zA-Z0-9%!@#$%^&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar", "");
-        int lastSlash = path.lastIndexOf(File.separator); 
-        if(path.length()-1 == lastSlash)
-        {
+        int lastSlash = path.lastIndexOf(File.separator);
+        if (path.length() - 1 == lastSlash) {
             path = path.substring(0, lastSlash);
         }
         path = path.replace("%20", " ");
         return path;
     }
 
-    static Properties getConfigFile()
-    {
+    static Properties getConfigFile() {
         Properties defConfFile = new Properties();
         Properties confFile = new Properties();
         File outFile = new File(GUI.getJarPath() + File.separator + "config.txt");
-        try
-        {
+        try {
             defConfFile.load(GUI.class.getResourceAsStream("/config.txt"));
-        }
-        catch (IOException exc)
-        {
+        } catch (IOException exc) {
             System.out.println("some error loading image! what goes: " + exc);
             exc.printStackTrace();
         }
-        if (!outFile.exists())
-        {
-            try
-            {
+        if (!outFile.exists()) {
+            try {
                 defConfFile.store(new FileOutputStream(outFile), null);
-            }
-            catch (IOException exc)
-            {
+            } catch (IOException exc) {
             }
         }
-        try
-        {   
+        try {
             confFile.load(new FileInputStream("config.txt"));
-        }
-        catch (IOException exc)
-        {
+        } catch (IOException exc) {
         }
         return confFile;
     }

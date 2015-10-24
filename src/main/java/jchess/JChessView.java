@@ -16,133 +16,96 @@
 package jchess;
 
 import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
-import javax.swing.Icon;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
+import org.jdesktop.application.*;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
-import java.applet.*;
 import java.io.IOException;
-
 
 
 /**
  * The application's main frame.
  */
-public class JChessView extends FrameView implements ActionListener, ComponentListener
-{
+public class JChessView extends FrameView implements ActionListener, ComponentListener {
     static GUI gui = null;
     GUI activeGUI;//in future it will be reference to active tab
 
-    public Game addNewTab(String title)
-    {
+    public Game addNewTab(String title) {
         Game newGUI = new Game();
         this.gamesPane.addTab(title, newGUI);
         return newGUI;
     }
 
-    public void actionPerformed(ActionEvent event)
-    {
+    public void actionPerformed(ActionEvent event) {
         Object target = event.getSource();
-        if (target == newGameItem)
-        {
+        if (target == newGameItem) {
             this.newGameFrame = new NewGameWindow();
             JChessApp.getApplication().show(this.newGameFrame);
-        }
-        else if (target == saveGameItem)
-        { //saveGame
-            if (this.gamesPane.getTabCount() == 0)
-            {
+        } else if (target == saveGameItem) { //saveGame
+            if (this.gamesPane.getTabCount() == 0) {
                 JOptionPane.showMessageDialog(null, Settings.lang("save_not_called_for_tab"));
                 return;
             }
-            while (true)
-            {//until
+            while (true) {//until
                 JFileChooser fc = new JFileChooser();
                 int retVal = fc.showSaveDialog(this.gamesPane);
-                if (retVal == JFileChooser.APPROVE_OPTION)
-                {
+                if (retVal == JFileChooser.APPROVE_OPTION) {
                     File selFile = fc.getSelectedFile();
                     Game tempGUI = (Game) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
-                    if (!selFile.exists())
-                    {
-                        try
-                        {
+                    if (!selFile.exists()) {
+                        try {
                             selFile.createNewFile();
-                        }
-                        catch (IOException exc)
-                        {
+                        } catch (IOException exc) {
                             System.out.println("error creating file: " + exc);
                         }
-                    }
-                    else if (selFile.exists())
-                    {
+                    } else if (selFile.exists()) {
                         int opt = JOptionPane.showConfirmDialog(tempGUI, Settings.lang("file_exists"), Settings.lang("file_exists"), JOptionPane.YES_NO_OPTION);
                         if (opt == JOptionPane.NO_OPTION)//if user choose to now overwrite
                         {
                             continue; // go back to file choose
                         }
                     }
-                    if (selFile.canWrite())
-                    {
+                    if (selFile.canWrite()) {
                         tempGUI.saveGame(selFile);
                     }
                     System.out.println(fc.getSelectedFile().isFile());
                     break;
-                }
-                else if (retVal == JFileChooser.CANCEL_OPTION)
-                {
+                } else if (retVal == JFileChooser.CANCEL_OPTION) {
                     break;
                 }
                 ///JChessView.gui.game.saveGame(fc.);
             }
-        }
-        else if (target == loadGameItem)
-        { //loadGame
+        } else if (target == loadGameItem) { //loadGame
             JFileChooser fc = new JFileChooser();
             int retVal = fc.showOpenDialog(this.gamesPane);
-            if (retVal == JFileChooser.APPROVE_OPTION)
-            {
+            if (retVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                if (file.exists() && file.canRead())
-                {
+                if (file.exists() && file.canRead()) {
                     Game.loadGame(file);
                 }
             }
-        }
-        else if (target == this.themeSettingsMenu)
-        {
-            try
-            {
+        } else if (target == this.themeSettingsMenu) {
+            try {
                 ThemeChooseWindow choose = new ThemeChooseWindow(this.getFrame());
                 JChessApp.getApplication().show(choose);
-            } 
-            catch(Exception exc)
-            {
+            } catch (Exception exc) {
                 JOptionPane.showMessageDialog(
-                    JChessApp.getApplication().getMainFrame(), 
+                    JChessApp.getApplication().getMainFrame(),
                     exc.getMessage()
                 );
-                System.out.println("Something wrong creating window - perhaps themeList is null");                
+                System.out.println("Something wrong creating window - perhaps themeList is null");
             }
         }
     }
 
- 
+
     ///--endOf- don't delete, becouse they're interfaces for MouseEvent
-        
+
 
     public JChessView(SingleFrameApplication app) {
         super(app);
-        
+
         initComponents();
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
@@ -186,18 +149,18 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
                     progressBar.setVisible(false);
                     progressBar.setValue(0);
                 } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
+                    String text = (String) (evt.getNewValue());
                     statusMessageLabel.setText((text == null) ? "" : text);
                     messageTimer.restart();
                 } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
+                    int value = (Integer) (evt.getNewValue());
                     progressBar.setVisible(true);
                     progressBar.setIndeterminate(false);
                     progressBar.setValue(value);
                 }
             }
         });
-        
+
     }
 
     @Action
@@ -216,7 +179,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
             promotionBox = new PawnPromotionWindow(mainFrame, color);
             promotionBox.setLocationRelativeTo(mainFrame);
             promotionBox.setModal(true);
-            
+
         }
         promotionBox.setColor(color);
         JChessApp.getApplication().show(promotionBox);
@@ -230,8 +193,8 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     }
 
 
-
-    /** This method is called from within the constructor to
+    /**
+     * This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
@@ -274,16 +237,16 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(gamesPane, GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(mainPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(gamesPane, GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)
+                    .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(gamesPane, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
+                .addGroup(mainPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(gamesPane, GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -406,26 +369,26 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMessageLabel)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 616, Short.MAX_VALUE)
-                .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusAnimationLabel)
-                .addContainerGap())
+                .addComponent(statusPanelSeparator, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+                .addGroup(statusPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(statusMessageLabel)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 616, Short.MAX_VALUE)
+                    .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(statusAnimationLabel)
+                    .addContainerGap())
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusPanelSeparator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(statusPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(statusMessageLabel)
-                    .addComponent(statusAnimationLabel)
-                    .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3))
+                .addGroup(statusPanelLayout.createSequentialGroup()
+                    .addComponent(statusPanelSeparator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(statusPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(statusMessageLabel)
+                        .addComponent(statusAnimationLabel)
+                        .addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGap(3, 3, 3))
         );
 
         setComponent(mainPanel);
@@ -435,27 +398,18 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
     private void moveBackItemActionPerformed(ActionEvent evt)//GEN-FIRST:event_moveBackItemActionPerformed
     {//GEN-HEADEREND:event_moveBackItemActionPerformed
-        if( gui != null && gui.game != null )
-        {
+        if (gui != null && gui.game != null) {
             gui.game.undo();
-        }
-        else
-        {
-            try 
-            {
+        } else {
+            try {
                 Game activeGame = this.getActiveTabGame();
-                if( !activeGame.undo() )
-                {
+                if (!activeGame.undo()) {
                     JOptionPane.showMessageDialog(null, "Nie da sie cofnac!");
                 }
-            } 
-            catch( ArrayIndexOutOfBoundsException exc )
-            {
+            } catch (ArrayIndexOutOfBoundsException exc) {
                 JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-            }
-            catch( UnsupportedOperationException exc )
-            {
-                JOptionPane.showMessageDialog(null , exc.getMessage());
+            } catch (UnsupportedOperationException exc) {
+                JOptionPane.showMessageDialog(null, exc.getMessage());
             }
         }
 
@@ -464,81 +418,60 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private void moveBackItemMouseClicked(MouseEvent evt)//GEN-FIRST:event_moveBackItemMouseClicked
     {//GEN-HEADEREND:event_moveBackItemMouseClicked
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_moveBackItemMouseClicked
 
     private void moveForwardItemMouseClicked(MouseEvent evt)//GEN-FIRST:event_moveForwardItemMouseClicked
     {//GEN-HEADEREND:event_moveForwardItemMouseClicked
         // TODO add your handling code here:
-             
+
     }//GEN-LAST:event_moveForwardItemMouseClicked
 
     private void moveForwardItemActionPerformed(ActionEvent evt)//GEN-FIRST:event_moveForwardItemActionPerformed
     {//GEN-HEADEREND:event_moveForwardItemActionPerformed
         // TODO add your handling code here:
-        if( gui != null && gui.game != null)
-        {
+        if (gui != null && gui.game != null) {
             gui.game.redo();
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 Game activeGame = this.getActiveTabGame();
-                if( !activeGame.redo() )
-                {
+                if (!activeGame.redo()) {
                     JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
                 }
-            } 
-            catch( ArrayIndexOutOfBoundsException exc )
-            {
+            } catch (ArrayIndexOutOfBoundsException exc) {
                 JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
+            } catch (UnsupportedOperationException exc) {
+                JOptionPane.showMessageDialog(null, exc.getMessage());
             }
-            catch( UnsupportedOperationException exc )
-            {
-                JOptionPane.showMessageDialog(null , exc.getMessage());
-            }
-        }        
+        }
     }//GEN-LAST:event_moveForwardItemActionPerformed
 
     private void rewindToBeginActionPerformed(ActionEvent evt)//GEN-FIRST:event_rewindToBeginActionPerformed
     {//GEN-HEADEREND:event_rewindToBeginActionPerformed
-        try
-        {
+        try {
             Game activeGame = this.getActiveTabGame();
-            if( !activeGame.rewindToBegin() )
-            {
+            if (!activeGame.rewindToBegin()) {
                 JOptionPane.showMessageDialog(null, "W pamieci brak ruchow do przodu!");
             }
-        }   
-        catch(ArrayIndexOutOfBoundsException exc)
-        {
+        } catch (ArrayIndexOutOfBoundsException exc) {
             JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
-        }
-        catch( UnsupportedOperationException exc )
-        {
-            JOptionPane.showMessageDialog(null , exc.getMessage());
+        } catch (UnsupportedOperationException exc) {
+            JOptionPane.showMessageDialog(null, exc.getMessage());
         }
     }//GEN-LAST:event_rewindToBeginActionPerformed
 
     private void rewindToEndActionPerformed(ActionEvent evt)//GEN-FIRST:event_rewindToEndActionPerformed
     {//GEN-HEADEREND:event_rewindToEndActionPerformed
-        try
-        {
+        try {
             Game activeGame = this.getActiveTabGame();
-            if( !activeGame.rewindToEnd() )
-            {
+            if (!activeGame.rewindToEnd()) {
                 JOptionPane.showMessageDialog(null, "W pamieci brak ruchow wstecz!");
             }
-        }   
-        catch( ArrayIndexOutOfBoundsException exc )
-        {
+        } catch (ArrayIndexOutOfBoundsException exc) {
             JOptionPane.showMessageDialog(null, "Brak aktywnej karty!");
+        } catch (UnsupportedOperationException exc) {
+            JOptionPane.showMessageDialog(null, exc.getMessage());
         }
-        catch( UnsupportedOperationException exc )
-        {
-            JOptionPane.showMessageDialog(null , exc.getMessage());
-        }        
     }//GEN-LAST:event_rewindToEndActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -569,21 +502,19 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
 
     private JDialog aboutBox;
     private PawnPromotionWindow promotionBox;
-    public  JDialog  newGameFrame;
+    public JDialog newGameFrame;
 
     public void componentResized(ComponentEvent e) {
         System.out.println("jchessView resized!!;");
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    protected Game getActiveTabGame() throws ArrayIndexOutOfBoundsException
-    {
-        Game activeGame = (Game)this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
+
+    protected Game getActiveTabGame() throws ArrayIndexOutOfBoundsException {
+        Game activeGame = (Game) this.gamesPane.getComponentAt(this.gamesPane.getSelectedIndex());
         return activeGame;
     }
-    
-    public int getNumberOfOpenedTabs()
-    {
+
+    public int getNumberOfOpenedTabs() {
         return this.gamesPane.getTabCount();
     }
 
@@ -598,5 +529,5 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     public void componentHidden(ComponentEvent e) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
 }
