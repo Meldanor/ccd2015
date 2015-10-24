@@ -95,7 +95,7 @@ public abstract class Piece
             }
 
         }
-        catch (java.lang.NullPointerException exc)
+        catch (NullPointerException exc)
         {
             System.out.println("Something wrong when painting piece: " + exc.getMessage());
         }

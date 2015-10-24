@@ -83,11 +83,11 @@ public class GameClock extends JPanel implements Runnable
         {//block this thread
             this.thread.wait();
         }
-        catch (java.lang.InterruptedException exc)
+        catch (InterruptedException exc)
         {
             System.out.println("Error blocking thread: " + exc);
         }
-        catch (java.lang.IllegalMonitorStateException exc1)
+        catch (IllegalMonitorStateException exc1)
         {
             System.out.println("Error blocking thread: " + exc1);
         }

@@ -145,7 +145,7 @@ public class Moves extends AbstractTableModel
             this.table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));//scroll to down
 
         }
-        catch (java.lang.ArrayIndexOutOfBoundsException exc)
+        catch (ArrayIndexOutOfBoundsException exc)
         {
             if (this.rowsNum > 0)
             {
@@ -267,7 +267,7 @@ public class Moves extends AbstractTableModel
             Move last = this.moveBackStack.get(this.moveBackStack.size() - 1);
             return last;
         }
-        catch (java.lang.ArrayIndexOutOfBoundsException exc)
+        catch (ArrayIndexOutOfBoundsException exc)
         {
             return null;
         }
@@ -280,7 +280,7 @@ public class Moves extends AbstractTableModel
             Move next = this.moveForwardStack.get(this.moveForwardStack.size() - 1);
             return next;
         }
-        catch (java.lang.ArrayIndexOutOfBoundsException exc)
+        catch (ArrayIndexOutOfBoundsException exc)
         {
             return null;
         }
@@ -325,7 +325,7 @@ public class Moves extends AbstractTableModel
             this.enterBlack = false;
             return null;
         }
-        catch (java.lang.ArrayIndexOutOfBoundsException exc)
+        catch (ArrayIndexOutOfBoundsException exc)
         {
             return null;
         }
@@ -405,7 +405,7 @@ public class Moves extends AbstractTableModel
                 }
             }
         }
-        catch (java.lang.StringIndexOutOfBoundsException exc)
+        catch (StringIndexOutOfBoundsException exc)
         {
             return false;
         }
@@ -464,7 +464,7 @@ public class Moves extends AbstractTableModel
             {
                 tempArray.add(moves.substring(from + 1, to).trim());
             }
-            catch (java.lang.StringIndexOutOfBoundsException exc)
+            catch (StringIndexOutOfBoundsException exc)
             {
                 System.out.println("error parsing file to load: " + exc);
                 break;

@@ -234,7 +234,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener
         {
             result = line.substring(from + 1, to);
         }
-        catch (java.lang.StringIndexOutOfBoundsException exc)
+        catch (StringIndexOutOfBoundsException exc)
         {
             System.out.println("error getting value: " + exc);
             return "none";

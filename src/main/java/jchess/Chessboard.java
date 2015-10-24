@@ -252,7 +252,7 @@ public class Chessboard extends JPanel
         {
             result = this.squares[(int) square_x - 1][(int) square_y - 1];
         }
-        catch (java.lang.ArrayIndexOutOfBoundsException exc)
+        catch (ArrayIndexOutOfBoundsException exc)
         {
             System.out.println("!!Array out of bounds when getting Square with Chessboard.getSquare(int,int) : " + exc);
             return null;
@@ -341,7 +341,7 @@ public class Chessboard extends JPanel
             fromSQ = this.squares[xFrom][yFrom];
             toSQ = this.squares[xTo][yTo];
         }
-        catch (java.lang.IndexOutOfBoundsException exc)
+        catch (IndexOutOfBoundsException exc)
         {
             System.out.println("error moving piece: " + exc);
             return;
@@ -362,7 +362,7 @@ public class Chessboard extends JPanel
     public void move(Square begin, Square end, boolean refresh, boolean clearForwardHistory)
     {
 
-        castling wasCastling = Moves.castling.none;
+        castling wasCastling = castling.none;
         Piece promotedPiece = null;
         boolean wasEnPassant = false;
         if (end.piece != null)
@@ -401,7 +401,7 @@ public class Chessboard extends JPanel
             {
                 move(squares[7][begin.pozY], squares[end.pozX - 1][begin.pozY], false, false);
                 ifWasCastling = end.piece;  //for undo
-                wasCastling = Moves.castling.shortCastling;
+                wasCastling = castling.shortCastling;
                 //this.moves_history.addMove(tempBegin, tempEnd, clearForwardHistory, wasCastling, wasEnPassant);
                 //return;
             }
@@ -409,7 +409,7 @@ public class Chessboard extends JPanel
             {
                 move(squares[0][begin.pozY], squares[end.pozX + 1][begin.pozY], false, false);
                 ifWasCastling = end.piece;  // for undo
-                wasCastling = Moves.castling.longCastling;
+                wasCastling = castling.longCastling;
                 //this.moves_history.addMove(tempBegin, tempEnd, clearForwardHistory, wasCastling, wasEnPassant);
                 //return;
             }
@@ -646,11 +646,11 @@ public class Chessboard extends JPanel
                 }
 
             }
-            catch (java.lang.ArrayIndexOutOfBoundsException exc)
+            catch (ArrayIndexOutOfBoundsException exc)
             {
                 return false;
             }
-            catch (java.lang.NullPointerException exc)
+            catch (NullPointerException exc)
             {
                 return false;
             }

@@ -84,12 +84,11 @@ public class GUI
         return true;
     }
 
-    // TODO: Remove this! We can use relative path instead absolute ones.
     static String getJarPath()
     {
         String path = GUI.class.getProtectionDomain().getCodeSource().getLocation().getFile();
         path = path.replaceAll("[a-zA-Z0-9%!@#$%^&*\\(\\)\\[\\]\\{\\}\\.\\,\\s]+\\.jar", "");
-        int lastSlash = path.lastIndexOf(File.separator);
+        int lastSlash = path.lastIndexOf(File.separator); 
         if(path.length()-1 == lastSlash)
         {
             path = path.substring(0, lastSlash);
@@ -105,9 +104,9 @@ public class GUI
         File outFile = new File(GUI.getJarPath() + File.separator + "config.txt");
         try
         {
-            defConfFile.load(GUI.class.getResourceAsStream("config.txt"));
+            defConfFile.load(GUI.class.getResourceAsStream("/config.txt"));
         }
-        catch (java.io.IOException exc)
+        catch (IOException exc)
         {
             System.out.println("some error loading image! what goes: " + exc);
             exc.printStackTrace();
@@ -118,7 +117,7 @@ public class GUI
             {
                 defConfFile.store(new FileOutputStream(outFile), null);
             }
-            catch (java.io.IOException exc)
+            catch (IOException exc)
             {
             }
         }
@@ -126,7 +125,7 @@ public class GUI
         {   
             confFile.load(new FileInputStream("config.txt"));
         }
-        catch (java.io.IOException exc)
+        catch (IOException exc)
         {
         }
         return confFile;
