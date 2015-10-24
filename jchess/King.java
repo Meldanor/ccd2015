@@ -1,4 +1,4 @@
-/*
+﻿/*
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -82,23 +82,61 @@ public class King extends Piece
         ArrayList list = new ArrayList();
         Square sq;
         Square sq1;
-        for (int i = this.square.pozX - 1; i <= this.square.pozX + 1; i++)
-        {
-            for (int y = this.square.pozY - 1; y <= this.square.pozY + 1; y++)
+//        for (int i = this.square.pozX - 1; i <= this.square.pozX + 1; i++)
+//        {
+//            for (int y = this.square.pozY - 1; y <= this.square.pozY + 1; y++)
+//            {
+//                if (!this.isout(i, y))
+//                {//out of bounds protection
+//                    sq = this.chessboard.squares[i][y];
+//                    if (this.square == sq)
+//                    {//if we're checking square on which is King
+//                        continue;
+//                    }
+//                    if (this.checkPiece(i, y))
+//                    {//if square is empty
+//                        if (isSafe(sq))
+//                        {
+//                            list.add(sq);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
+        for (int x = this.square.pozX - 1; x <= this.square.pozX + 1; x++) {
+            int y = this.square.pozY;
+            if (!this.isout(x, y))
             {
-                if (!this.isout(i, y))
-                {//out of bounds protection
-                    sq = this.chessboard.squares[i][y];
-                    if (this.square == sq)
-                    {//if we're checking square on which is King
-                        continue;
+                sq = this.chessboard.squares[x][y];
+                if (this.square == sq)
+                {//if we're checking square on which is King
+                     continue;
+                }
+                if (this.checkPiece(x, y))
+                {//if square is empty
+                    if (isSafe(sq))
+                    {
+                        list.add(sq);
                     }
-                    if (this.checkPiece(i, y))
-                    {//if square is empty
-                        if (isSafe(sq))
-                        {
-                            list.add(sq);
-                        }
+                }
+            }
+        }
+
+        for (int y = this.square.pozY - 1; y <= this.square.pozY + 1; y++) {
+            int x = this.square.pozX;
+            if (!this.isout(x, y))
+            {
+                sq = this.chessboard.squares[x][y];
+                if (this.square == sq)
+                {//if we're checking square on which is King
+                    continue;
+                }
+                if (this.checkPiece(x, y))
+                {//if square is empty
+                    if (isSafe(sq))
+                    {
+                        list.add(sq);
                     }
                 }
             }
