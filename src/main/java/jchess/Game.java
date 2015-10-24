@@ -100,7 +100,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
         }
         Calendar cal = Calendar.getInstance();
         String str = new String("");
-        String info = new String("[Event \"Game\"]\n[Date \"" + cal.get(cal.YEAR) + "." + (cal.get(cal.MONTH) + 1) + "." + cal.get(cal.DAY_OF_MONTH) + "\"]\n"
+        String info = new String("[Event \"Game\"]\n[Date \"" + cal.get(Calendar.YEAR) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.DAY_OF_MONTH) + "\"]\n"
             + "[White \"" + this.settings.playerWhite.name + "\"]\n[Black \"" + this.settings.playerBlack.name + "\"]\n\n");
         str += info;
         str += this.moves.getMovesInString();
@@ -477,7 +477,7 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     public void componentResized(ComponentEvent e) {
         int height = this.getHeight() >= this.getWidth() ? this.getWidth() : this.getHeight();
         int chess_height = (int) Math.round((height * 0.8) / 8) * 8;
-        this.chessboard.resizeChessboard((int) chess_height);
+        this.chessboard.resizeChessboard(chess_height);
         chess_height = this.chessboard.getHeight();
         this.moves.getScrollPane().setLocation(new Point(chess_height + 5, 100));
         this.moves.getScrollPane().setSize(this.moves.getScrollPane().getWidth(), chess_height - 100);

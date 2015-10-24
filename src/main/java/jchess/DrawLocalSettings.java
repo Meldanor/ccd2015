@@ -61,8 +61,6 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"
         };
 
-    ;
-
 
     /**
      * Method witch is checking correction of edit tables
@@ -145,18 +143,14 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             {
                 pl2.setType(Player.playerTypes.computer);
             }
-            if (this.upsideDown.isSelected()) //if upsideDown is checked
-            {
-                sett.upsideDown = true;
-            } else {
-                sett.upsideDown = false;
-            }
+            //if upsideDown is checked
+            sett.upsideDown = this.upsideDown.isSelected();
             if (this.timeGame.isSelected()) //if timeGame is checked
             {
                 String value = this.times[this.time4Game.getSelectedIndex()];//set time for game
                 Integer val = new Integer(value);
                 sett.timeLimitSet = true;
-                sett.timeForGame = (int) val * 60;//set time for game and mult it to seconds
+                sett.timeForGame = val * 60;//set time for game and mult it to seconds
                 newGUI.gameClock.setTimes(sett.timeForGame, sett.timeForGame);
                 newGUI.gameClock.start();
             }

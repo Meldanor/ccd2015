@@ -196,7 +196,7 @@ public class GameClock extends JPanel implements Runnable {
         /*in documentation it's called 'setPlayer' but when we've 'setTimes' better to use
          * one convention of naming methods - this've to be repaired in documentation by Wąsu:P
         dojdziemy do tego:D:D:D*/
-        if (p1.color == p1.color.white) {
+        if (p1.color == Player.colors.white) {
             this.clock1.setPlayer(p1);
             this.clock2.setPlayer(p2);
         } else {
@@ -214,7 +214,7 @@ public class GameClock extends JPanel implements Runnable {
                 if (this.runningClock.decrement()) {
                     repaint();
                     try {
-                        thread.sleep(1000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         System.out.println("Some error in gameClock thread: " + e);
                     }

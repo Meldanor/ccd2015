@@ -42,7 +42,7 @@ public class Server implements Runnable {
     private static ServerSocket ss;
     private static boolean isRunning = false;
 
-    public static enum connection_info {
+    public enum connection_info {
         all_is_ok(0),
         err_bad_table_ID(1),
         err_table_is_full(2),
@@ -402,9 +402,7 @@ public class Server implements Runnable {
 
         public boolean isAllPlayers() //is it all playing players?
         {
-            if (clientPlayer1 == null || clientPlayer2 == null)
-                return false;
-            return true;
+            return !(clientPlayer1 == null || clientPlayer2 == null);
         }
 
         public boolean isObservers() //is it any observer?

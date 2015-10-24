@@ -33,7 +33,7 @@ public class Console {
         System.out.println("JChess Server Start!");
 
         Server server = new Server(); //create server
-        server.isPrintEnable = false;
+        Server.isPrintEnable = false;
 
         boolean isOK = true;
         while (isOK) {
@@ -65,7 +65,7 @@ public class Console {
                 server.newTable(gameID, pass, canObserver, true); //create new table
             } else if (str.equals("2")) //list of tables
             {
-                for (Map.Entry<Integer, Table> entry : server.tables.entrySet()) {
+                for (Map.Entry<Integer, Table> entry : Server.tables.entrySet()) {
                     Integer id = entry.getKey();
                     Table table = entry.getValue();
 
@@ -87,11 +87,11 @@ public class Console {
                 }
             } else if (str.equals("3")) //on/off server's communicats
             {
-                if (server.isPrintEnable == false) {
-                    server.isPrintEnable = true;
+                if (Server.isPrintEnable == false) {
+                    Server.isPrintEnable = true;
                     System.out.println("Komunikaty serwera zostały włączone");
                 } else {
-                    server.isPrintEnable = false;
+                    Server.isPrintEnable = false;
                     System.out.println("Komunikaty serwera zostały wyłączone");
                 }
             } else if (str.equals("4")) //exit

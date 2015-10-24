@@ -85,12 +85,8 @@ public class Client implements Runnable {
                 if (Connection_info.get(servCode).name().startsWith("err_")) {
                     throw new Error(Connection_info.get(servCode).name());
                 }
-                if (servCode == Connection_info.all_is_ok.getValue()) {
-                    return true;
-                } else //is any bug
-                {
-                    return false;
-                }
+                //is any bug
+                return servCode == Connection_info.all_is_ok.getValue();
             } catch (Error err) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, err);
                 return false;

@@ -244,10 +244,7 @@ public class Table {//Table: {two player, one chessboard and x observers}
 
     public boolean isAllPlayers() {//is it all playing players?
 
-        if (clientPlayer1 == null || clientPlayer2 == null) {
-            return false;
-        }
-        return true;
+        return !(clientPlayer1 == null || clientPlayer2 == null);
     }
 
     public boolean isObservers() {//is it any observer?

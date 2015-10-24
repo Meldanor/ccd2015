@@ -635,9 +635,9 @@ public class Chessboard extends JPanel {
             g2d.drawImage(sel_square,
                 ((this.active_x_square - 1) * (int) square_height) + topLeftPoint.x,
                 ((this.active_y_square - 1) * (int) square_height) + topLeftPoint.y, null);//draw image of selected square
-            Square tmpSquare = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)];
+            Square tmpSquare = this.squares[(this.active_x_square - 1)][(this.active_y_square - 1)];
             if (tmpSquare.piece != null) {
-                this.moves = this.squares[(int) (this.active_x_square - 1)][(int) (this.active_y_square - 1)].piece.allMoves();
+                this.moves = this.squares[(this.active_x_square - 1)][(this.active_y_square - 1)].piece.allMoves();
             }
 
             for (Iterator it = moves.iterator(); moves != null && it.hasNext(); ) {
@@ -687,7 +687,7 @@ public class Chessboard extends JPanel {
         labelHeight = (labelHeight < min_label_height) ? min_label_height : labelHeight;
         int labelWidth = (int) Math.ceil(square_height * 8 + (2 * labelHeight));
         BufferedImage uDL = new BufferedImage(labelWidth + min_label_height, labelHeight, BufferedImage.TYPE_3BYTE_BGR);
-        Graphics2D uDL2D = (Graphics2D) uDL.createGraphics();
+        Graphics2D uDL2D = uDL.createGraphics();
         uDL2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         uDL2D.setColor(Color.white);
 
@@ -717,7 +717,7 @@ public class Chessboard extends JPanel {
         this.upDownLabel = uDL;
 
         uDL = new BufferedImage(labelHeight, labelWidth + min_label_height, BufferedImage.TYPE_3BYTE_BGR);
-        uDL2D = (Graphics2D) uDL.createGraphics();
+        uDL2D = uDL.createGraphics();
         uDL2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         uDL2D.setColor(Color.white);
         //uDL2D.fillRect(0, 0, 800, 800);

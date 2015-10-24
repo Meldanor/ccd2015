@@ -45,7 +45,7 @@ public abstract class Piece {
     Piece(Chessboard chessboard, Player player) {
         this.chessboard = chessboard;
         this.player = player;
-        if (player.color == player.color.black) {
+        if (player.color == Player.colors.black) {
             image = imageBlack;
         } else {
             image = imageWhite;
@@ -70,7 +70,7 @@ public abstract class Piece {
             if (image != null && g != null) {
                 Image tempImage = orgImage;
                 BufferedImage resized = new BufferedImage(height, height, BufferedImage.TYPE_INT_ARGB_PRE);
-                Graphics2D imageGr = (Graphics2D) resized.createGraphics();
+                Graphics2D imageGr = resized.createGraphics();
                 imageGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 imageGr.drawImage(tempImage, 0, 0, height, height, null);
                 imageGr.dispose();
@@ -107,7 +107,7 @@ public abstract class Piece {
     }
 
     void setImage() {
-        if (this.player.color == this.player.color.black) {
+        if (this.player.color == Player.colors.black) {
             image = imageBlack;
         } else {
             image = imageWhite;
@@ -137,10 +137,7 @@ public abstract class Piece {
      * @return true if parameters are out of bounds (array)
      */
     protected boolean isout(int x, int y) {
-        if (x < 0 || x > 7 || y < 0 || y > 7) {
-            return true;
-        }
-        return false;
+        return x < 0 || x > 7 || y < 0 || y > 7;
     }
 
     /**
@@ -154,12 +151,8 @@ public abstract class Piece {
             return false;
         }
         Piece piece = chessboard.squares[x][y].piece;
-        if (piece == null || //if this sqhuare is empty
-            piece.player != this.player) //or piece is another player
-        {
-            return true;
-        }
-        return false;
+        return piece == null || //if this sqhuare is empty
+            piece.player != this.player;
     }
 
     /**
@@ -174,10 +167,7 @@ public abstract class Piece {
         if (sq.piece == null) {
             return false;
         }
-        if (this.player != sq.piece.player) {
-            return true;
-        }
-        return false;
+        return this.player != sq.piece.player;
     }
 
     public String getSymbol() {
