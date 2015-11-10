@@ -6,6 +6,8 @@ import java.util.stream.Stream;
 
 /**
  * A gameboard for chess based on a hexagonal field using axial coordinates.
+ * <p>
+ * The base (0,0) is at the top left of the game. The x-axis is from left to right and the y-axis from
  *
  * @since 03.11.2015
  */
@@ -14,19 +16,34 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
     private Map<Position2D, Figure> chessBoard;
     private Map<Figure, Position2D> figurePosition;
 
-    public HexagonalGameboard(int horizontal, int diagonal, Map<Position2D, Figure> figures) {
-        this.chessBoard = new HashMap<>(figures);
-        for (int x = 0; x < horizontal; x++) {
-            for (int y = 0; y < diagonal; y++) {
-                Position2D pos = Position2D.of(x, y);
-                this.chessBoard.putIfAbsent(pos, EmptySpace.get());
-            }
-        }
+    public HexagonalGameboard(Map<Position2D, Position2D> rowsIntervals, Map<Position2D, Figure> figures) {
+        this.chessBoard = createChessBoard(rowsIntervals, figures);
+
         this.figurePosition = new IdentityHashMap<>();
 
         for (Map.Entry<Position2D, Figure> entry : figures.entrySet()) {
             this.figurePosition.put(entry.getValue(), entry.getKey());
         }
+    }
+
+    private Map<Position2D, Figure> createChessBoard(Map<Position2D, Position2D> rowsIntervals,
+                                                     Map<Position2D, Figure> figures) {
+        Map<Position2D, Figure> map = new HashMap<>();
+        for (Map.Entry<Position2D, Position2D> entry : rowsIntervals.entrySet()) {
+            if (entry.getValue().getY() != entry.getKey().getY()) {
+                throw new IllegalArgumentException("The Y values must be equal for each pair!"
+                    + entry.getKey() + " ; " + entry.getValue());
+            }
+            int y = entry.getKey().getY();
+
+            for (int x = entry.getKey().getX(); x < entry.getValue().getX(); x++) {
+                Position2D pos = Position2D.of(x, y);
+                Figure figure = figures.getOrDefault(pos, EmptySpace.get());
+                map.put(pos, figure);
+            }
+        }
+
+        return map;
     }
 
     @Override
@@ -79,12 +96,12 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
         int y = position.getY();
 
         return Stream.of(
-            Position2D.of(x + 1, y),
-            Position2D.of(x + 1, y - 1),
-            Position2D.of(x, y - 1),
-            Position2D.of(x - 1, y),
-            Position2D.of(x - 1, y + 1),
-            Position2D.of(x, y + 1)
+            Position2D.of(x - 1, y), // NE
+            Position2D.of(x, y + 1), // E
+            Position2D.of(x + 1, y + 1), // SE
+            Position2D.of(x + 1, y), // SW
+            Position2D.of(x, y - 1), //W
+            Position2D.of(x - 1, y - 1) // NW
         ).filter(this::isInField)
             .collect(Collectors.toList());
     }
