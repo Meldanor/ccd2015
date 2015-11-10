@@ -30,13 +30,13 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
                                                      Map<Position2D, Figure> figures) {
         Map<Position2D, Figure> map = new HashMap<>();
         for (Map.Entry<Position2D, Position2D> entry : rowsIntervals.entrySet()) {
-            if (entry.getValue().getY() != entry.getKey().getY()) {
-                throw new IllegalArgumentException("The Y values must be equal for each pair!"
+            if (entry.getValue().getX() != entry.getKey().getX()) {
+                throw new IllegalArgumentException("The X values must be equal for each pair!"
                     + entry.getKey() + " ; " + entry.getValue());
             }
-            int y = entry.getKey().getY();
+            int x = entry.getKey().getX();
 
-            for (int x = entry.getKey().getX(); x < entry.getValue().getX(); x++) {
+            for (int y = entry.getKey().getY(); y <= entry.getValue().getY(); y++) {
                 Position2D pos = Position2D.of(x, y);
                 Figure figure = figures.getOrDefault(pos, EmptySpace.get());
                 map.put(pos, figure);
