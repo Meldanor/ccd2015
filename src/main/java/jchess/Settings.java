@@ -36,6 +36,7 @@ public class Settings implements Serializable {
     public boolean runningGameClock;
     public boolean timeLimitSet;//tel us if player choose time 4 game or it's infinity
     public boolean upsideDown;
+    public String movesString;
 
     public enum gameModes {
 
