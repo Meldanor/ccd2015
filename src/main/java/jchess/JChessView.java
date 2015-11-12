@@ -96,6 +96,18 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
                 );
                 System.out.println("Something wrong creating window - perhaps themeList is null");
             }
+        } else if (target == this.languageSettingsMenu) {
+            try {
+                LanguageChooseWindow chooseLanguage = new LanguageChooseWindow(this.getFrame());
+                JChessApp.getApplication().show(chooseLanguage);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(
+                        JChessApp.getApplication().getMainFrame(),
+                        e.getMessage()
+                );
+                System.out.println("Something wrong creating window - perhaps themeList is null");
+
+            }
         }
     }
 
@@ -218,6 +230,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         rewindToEnd = new JMenuItem();
         optionsMenu = new JMenu();
         themeSettingsMenu = new JMenuItem();
+        languageSettingsMenu = new JMenuItem();
         JMenu helpMenu = new JMenu();
         JMenuItem aboutMenuItem = new JMenuItem();
         statusPanel = new JPanel();
@@ -342,6 +355,11 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
         themeSettingsMenu.setName("themeSettingsMenu"); // NOI18N
         optionsMenu.add(themeSettingsMenu);
         themeSettingsMenu.addActionListener(this);
+
+        languageSettingsMenu.setText(resourceMap.getString("languageSettingsMenu.text"));  // NOI18N
+        languageSettingsMenu.setName("languageSettingsMenu");  // NOI18N
+        optionsMenu.add(languageSettingsMenu);
+        languageSettingsMenu.addActionListener(this);
 
         menuBar.add(optionsMenu);
 
@@ -492,6 +510,7 @@ public class JChessView extends FrameView implements ActionListener, ComponentLi
     private JLabel statusMessageLabel;
     private JPanel statusPanel;
     private JMenuItem themeSettingsMenu;
+    private JMenuItem languageSettingsMenu;
     // End of variables declaration//GEN-END:variables
     //private JTabbedPaneWithIcon gamesPane;
     private final Timer messageTimer;
