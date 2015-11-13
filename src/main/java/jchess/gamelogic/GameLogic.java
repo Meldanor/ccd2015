@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by stephan on 11.11.2015.
+ * Old Game Logic
  */
 
 public class GameLogic {

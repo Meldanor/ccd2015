@@ -4,8 +4,7 @@ import java.util.List;
 
 /**
  * Created by stephan on 11.11.2015.
- * POJO
- *
+ * POJO containing data for historymanagement
  */
 public class GameStateHistory {
     public List<GameState> history;
