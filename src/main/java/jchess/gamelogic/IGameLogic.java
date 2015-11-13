@@ -33,8 +33,4 @@ public interface IGameLogic {
     List<String> getPossibleMoves();
     String getActiveFigureID();
 
-    void getTurnHistory();
-    void stepHistoryBackward();
-    void stepHistoryForward();
-
 }

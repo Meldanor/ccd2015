@@ -37,18 +37,4 @@ public class ThreeWayChessGameLogic implements IGameLogic {
         return null;
     }
 
-    @Override
-    public void getTurnHistory() {
-
-    }
-
-    @Override
-    public void stepHistoryBackward() {
-
-    }
-
-    @Override
-    public void stepHistoryForward() {
-
-    }
 }
