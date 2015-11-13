@@ -1,7 +1,6 @@
 package jchess.gamelogic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by stephan on 11.11.2015.
@@ -29,7 +28,7 @@ public class ThreeWayChessGameLogic implements IGameLogic {
     }
 
     @Override
-    public ArrayList<String> getPossibleMoves() {
+    public List<String> getPossibleMoves() {
         return null;
     }
 

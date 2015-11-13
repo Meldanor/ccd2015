@@ -1,6 +1,6 @@
 package jchess.gamelogic;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by stephan on 11.11.2015.
@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class GameState {
 
-    public HashMap<String, String> fieldIDbyFigureID;
+    public Map<String, String> fieldIDbyFigureID;
     public int turnNumber;
     public String activePlayerID;
 

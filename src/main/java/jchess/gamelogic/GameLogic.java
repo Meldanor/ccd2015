@@ -2,7 +2,7 @@ package jchess.gamelogic;
 
 import jchess.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by stephan on 11.11.2015.
@@ -14,7 +14,7 @@ public class GameLogic {
     private Player activePlayer;
     private Moves moves;
     public boolean blockedChessboard;
-    ArrayList<GameState> movesHistory;
+    List<GameState> movesHistory;
 
     public Moves getMoves() {
         return moves;

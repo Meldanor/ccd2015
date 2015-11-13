@@ -1,9 +1,7 @@
 package jchess.gamelogic;
 
 import jchess.Player;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by stephan on 11.11.2015.
@@ -32,7 +30,7 @@ public interface IGameLogic {
     * Additional Information: getPossibleMoves,getActiveFigureID
     * Returns possible FieldID of selected Figure
     * */
-    ArrayList<String> getPossibleMoves();
+    List<String> getPossibleMoves();
     String getActiveFigureID();
 
     void getTurnHistory();
