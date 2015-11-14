@@ -13,8 +13,12 @@ import java.util.Calendar;
  */
 public class GameLoader {
 
-    /*
-    * todo: safe GameStateHistory
+    /**
+     * todo: safe GameStateHistory
+     * @param path Path to savefile location
+     * @param settings Settings from Gamestate which are to save
+     * @param moves moves to save
+     * @throws IOException when file could not be written
      */
     static public void saveGame(File path, Settings settings, Moves moves) throws IOException{
         File file = path;
@@ -38,9 +42,13 @@ public class GameLoader {
             throw new IOException("error_writing_to_file");
         }
     }
-    /*
-    * todo: load GameStateHistory into new GameLogic
-    * */
+    /**
+     * todo: load GameStateHistory into new GameLogic
+     * @param file  the game file to load
+     * @returns settings from game file
+     * @throws ReadGameException class object when something goes wrong reading the file
+     * @throws FileNotFoundException
+     */
     static public Settings loadGame(File file) throws ReadGameException, FileNotFoundException {
         FileReader fileR = null;
         fileR = new FileReader(file);
