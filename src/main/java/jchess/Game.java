@@ -20,16 +20,16 @@
  */
 package jchess;
 
+import jchess.exceptions.ReadGameException;
+import jchess.gamelogic.GameLoader;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,21 +42,23 @@ import java.util.logging.Logger;
  */
 public class Game extends JPanel implements MouseListener, ComponentListener {
 
-    public Settings settings;
+    public Player activePlayer;
     public boolean blockedChessboard;
+    public Settings settings;
+    public Moves moves;
     public Chessboard chessboard;
-    private Player activePlayer;
     public GameClock gameClock;
     public Client client;
-    public Moves moves;
     public Chat chat;
 
     Game() {
+
         this.setLayout(null);
         this.moves = new Moves(this);
         settings = new Settings();
         chessboard = new Chessboard(this.settings, this.moves);
-        chessboard.setVisible(true);
+        this.chessboard.setVisible(true);
+
         chessboard.setSize(Chessboard.img_height, Chessboard.img_widht);
         chessboard.addMouseListener(this);
         chessboard.setLocation(new Point(0, 0));
@@ -89,29 +91,11 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      * @param path address of place where game will be saved
      */
     public void saveGame(File path) {
-        File file = path;
-        FileWriter fileW = null;
         try {
-            fileW = new FileWriter(file);
-        } catch (java.io.IOException exc) {
-            System.err.println("error creating fileWriter: " + exc);
-            JOptionPane.showMessageDialog(this, Settings.lang("error_writing_to_file") + ": " + exc);
-            return;
-        }
-        Calendar cal = Calendar.getInstance();
-        String str = new String("");
-        String info = new String("[Event \"Game\"]\n[Date \"" + cal.get(Calendar.YEAR) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.DAY_OF_MONTH) + "\"]\n"
-            + "[White \"" + this.settings.playerWhite.name + "\"]\n[Black \"" + this.settings.playerBlack.name + "\"]\n\n");
-        str += info;
-        str += this.moves.getMovesInString();
-        try {
-            fileW.write(str);
-            fileW.flush();
-            fileW.close();
-        } catch (java.io.IOException exc) {
-            System.out.println("error writing to file: " + exc);
-            JOptionPane.showMessageDialog(this, Settings.lang("error_writing_to_file") + ": " + exc);
-            return;
+            GameLoader.saveGame(path,this.settings,this.moves);
+        } catch (IOException e) {
+            System.err.println("error saving game file: " + e);
+            JOptionPane.showMessageDialog(this, Settings.lang(e.getMessage()) + ": " + e);
         }
         JOptionPane.showMessageDialog(this, Settings.lang("game_saved_properly"));
     }
@@ -136,91 +120,27 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
     }
     }*/
     static public void loadGame(File file) {
-        FileReader fileR = null;
+        Settings loadedSettings = null;
         try {
-            fileR = new FileReader(file);
-        } catch (java.io.IOException exc) {
-            System.out.println("Something wrong reading file: " + exc);
+            loadedSettings = GameLoader.loadGame(file);
+        } catch (ReadGameException e) {
+            /*todo Let user know  */
+            System.out.println("Error reading file: " + e);
+            return;
+        } catch (FileNotFoundException e) {
+            /*todo Let user know  */
+            System.out.println("File not found: " + e);
             return;
         }
-        BufferedReader br = new BufferedReader(fileR);
-        String tempStr = new String();
-        String blackName, whiteName;
-        try {
-            tempStr = getLineWithVar(br, new String("[White"));
-            whiteName = getValue(tempStr);
-            tempStr = getLineWithVar(br, new String("[Black"));
-            blackName = getValue(tempStr);
-            tempStr = getLineWithVar(br, new String("1."));
-        } catch (ReadGameError err) {
-            System.out.println("Error reading file: " + err);
-            return;
-        }
-        Game newGUI = JChessApp.jcv.addNewTab(whiteName + " vs. " + blackName);
-        Settings locSetts = newGUI.settings;
-        locSetts.playerBlack.name = blackName;
-        locSetts.playerWhite.name = whiteName;
-        locSetts.playerBlack.setType(Player.playerTypes.localUser);
-        locSetts.playerWhite.setType(Player.playerTypes.localUser);
-        locSetts.gameMode = Settings.gameModes.loadGame;
-        locSetts.gameType = Settings.gameTypes.local;
+        Game newGUI = JChessApp.jcv.addNewTab(loadedSettings.playerWhite.getName() + " vs. " + loadedSettings.playerBlack.getName());
+        newGUI.settings = loadedSettings;
 
         newGUI.newGame();
         newGUI.blockedChessboard = true;
-        newGUI.moves.setMoves(tempStr);
+        newGUI.moves.setMoves(loadedSettings.movesString);
         newGUI.blockedChessboard = false;
         newGUI.chessboard.repaint();
         //newGUI.chessboard.draw();
-    }
-
-    /**
-     * Method checking in with of line there is an error
-     *
-     * @param br     BufferedReader class object to operate on
-     * @param srcStr String class object with text which variable you want to get in file
-     * @return String with searched variable in file (whole line)
-     * @throws ReadGameError class object when something goes wrong when reading file
-     */
-    static public String getLineWithVar(BufferedReader br, String srcStr) throws ReadGameError {
-        String str = new String();
-        while (true) {
-            try {
-                str = br.readLine();
-            } catch (java.io.IOException exc) {
-                System.out.println("Something wrong reading file: " + exc);
-            }
-            if (str == null) {
-                throw new ReadGameError();
-            }
-            if (str.startsWith(srcStr)) {
-                return str;
-            }
-        }
-    }
-
-    /**
-     * Method to get value from loaded txt line
-     *
-     * @param line Line which is readed
-     * @return result String with loaded value
-     * @throws ReadGameError object class when something goes wrong
-     */
-    static public String getValue(String line) throws ReadGameError {
-        //System.out.println("getValue called with: "+line);
-        int from = line.indexOf("\"");
-        int to = line.lastIndexOf("\"");
-        int size = line.length() - 1;
-        String result = new String();
-        if (to < from || from > size || to > size || to < 0 || from < 0) {
-            throw new ReadGameError();
-        }
-        try {
-            result = line.substring(from + 1, to);
-        } catch (StringIndexOutOfBoundsException exc) {
-            System.out.println("error getting value: " + exc);
-            return "none";
-        }
-        return result;
     }
 
     /**
@@ -253,10 +173,10 @@ public class Game extends JPanel implements MouseListener, ComponentListener {
      *
      * @param message what to show player(s) at end of the game (for example "draw", "black wins" etc.)
      */
-    public void endGame(String massage) {
+    public void endGame(String message) {
         this.blockedChessboard = true;
-        System.out.println(massage);
-        JOptionPane.showMessageDialog(null, massage);
+        System.out.println(message);
+        JOptionPane.showMessageDialog(null, message);
     }
 
     /**

@@ -17,6 +17,6 @@ public final class EmptySpace extends Figure {
     }
 
     private EmptySpace() {
-        super("", FigureType.FREE);
+        super("", FigureType.FREE, null);
     }
 }
