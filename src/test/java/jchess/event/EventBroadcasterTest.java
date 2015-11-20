@@ -80,10 +80,10 @@ public class EventBroadcasterTest {
         Figure figureMock = mock(Figure.class);
         Position pos = mock(Position.class);
 
-        // Register for the event. This callback should be executed AFTER the newFigureMovedEvent().trigger()
+        // Register for another event, so this callback should NOT get invoked.
         EventBroadcaster.register(EventType.FIGURE_MOVED, (FigureMovedEvent e) -> fail());
 
-        // Trigger the event and jump into the callback above
+        // Trigger the event
         new FigureCapturedEvent(figureMock, pos, figureMock, pos).trigger();
     }
 }
