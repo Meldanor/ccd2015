@@ -37,7 +37,7 @@ public class BishopMovement implements MovementPattern {
 
 
     /**
-     * Checks all possible actions for the bishop along a single direction.
+     * Checks all possible {@link ChessAction} for the bishop along a single direction.
      *
      * @param chessboard The chessboard in its current state.
      * @param bishop     The respective bishop figure.
