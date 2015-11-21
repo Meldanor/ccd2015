@@ -73,6 +73,7 @@ public class BishopMovement implements MovementPattern {
                     if (target.isOppositesFigure(bishop)) {
                         possibleActionsInDirection.add(this.captureEnemy(bishop, target, nextPosition));
                     }
+                    break;
                 }
 
                 latestValidPosition = nextPosition;
