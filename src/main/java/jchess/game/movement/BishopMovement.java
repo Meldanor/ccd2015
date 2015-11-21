@@ -13,24 +13,24 @@ import java.util.Optional;
  */
 public class BishopMovement implements MovementPattern {
 
-    private static int[] NORTH = {-2, -1};
-    private static int[] NORTH_EAST = {-1, 1};
-    private static int[] SOUTH_EAST = {1, 2};
-    private static int[] SOUTH = {2, 1};
-    private static int[] SOUTH_WEST = {1, -1};
-    private static int[] NORTH_WEST = {-1, -2};
+    private static final int[] NORTH = {-2, -1};
+    private static final int[] NORTH_EAST = {-1, 1};
+    private static final int[] SOUTH_EAST = {1, 2};
+    private static final int[] SOUTH = {2, 1};
+    private static final int[] SOUTH_WEST = {1, -1};
+    private static final int[] NORTH_WEST = {-1, -2};
 
 
     @Override
     public List<ChessAction> getPossibleActions(Figure figure, Gameboard chessboard) {
         List<ChessAction> possibleActions = new ArrayList<>();
 
-        possibleActions.addAll(checkDirection(figure, chessboard, NORTH));
-        possibleActions.addAll(checkDirection(figure, chessboard, NORTH_EAST));
-        possibleActions.addAll(checkDirection(figure, chessboard, SOUTH_EAST));
-        possibleActions.addAll(checkDirection(figure, chessboard, SOUTH));
-        possibleActions.addAll(checkDirection(figure, chessboard, SOUTH_WEST));
-        possibleActions.addAll(checkDirection(figure, chessboard, NORTH_WEST));
+        possibleActions.addAll(this.checkDirection(figure, chessboard, NORTH));
+        possibleActions.addAll(this.checkDirection(figure, chessboard, NORTH_EAST));
+        possibleActions.addAll(this.checkDirection(figure, chessboard, SOUTH_EAST));
+        possibleActions.addAll(this.checkDirection(figure, chessboard, SOUTH));
+        possibleActions.addAll(this.checkDirection(figure, chessboard, SOUTH_WEST));
+        possibleActions.addAll(this.checkDirection(figure, chessboard, NORTH_WEST));
 
         return possibleActions;
     }
@@ -60,29 +60,19 @@ public class BishopMovement implements MovementPattern {
             List<Position2D> identicalNeighbors = chessboard.getNeighbors(latestValidPosition);
             identicalNeighbors.retainAll(chessboard.getNeighbors(nextPosition));
 
-            Optional<Figure> neighborOptional1 = chessboard.getFigure(identicalNeighbors.get(0));
-            Optional<Figure> neighborOptional2 = chessboard.getFigure(identicalNeighbors.get(1));
+            Optional<Figure> identicalNeighbor1 = chessboard.getFigure(identicalNeighbors.get(0));
+            Optional<Figure> identicalNeighbor2 = chessboard.getFigure(identicalNeighbors.get(1));
 
-            if (neighborOptional1.isPresent() == false || neighborOptional2.isPresent() == false) {
-                break;
-            }
+            if (identicalNeighbor1.isPresent() == false || identicalNeighbor2.isPresent() == false) {
+                Optional<Figure> nextPositionFigure = chessboard.getFigure(nextPosition);
 
-            Figure identicalNeighbor1 = neighborOptional1.get();
-            Figure identicalNeighbor2 = neighborOptional2.get();
-
-            if (identicalNeighbor1.getType() == FigureType.FREE || identicalNeighbor2.getType() == FigureType.FREE) {
-                Optional<Figure> nextPositionOptional = chessboard.getFigure(nextPosition);
-
-                if (nextPositionOptional.isPresent() == false) {
-                    break;
-                }
-
-                Figure target = nextPositionOptional.get();
-
-                if (target.getType() == FigureType.FREE) {
+                if (nextPositionFigure.isPresent() == false) {
                     possibleActionsInDirection.add(this.moveTo(bishop, nextPosition));
-                } else if (target.isOppositesFigure(bishop)) {
-                    possibleActionsInDirection.add(this.captureEnemy(bishop, target, nextPosition));
+                } else {
+                    Figure target = nextPositionFigure.get();
+                    if (target.isOppositesFigure(bishop)) {
+                        possibleActionsInDirection.add(this.captureEnemy(bishop, target, nextPosition));
+                    }
                 }
 
                 latestValidPosition = nextPosition;
