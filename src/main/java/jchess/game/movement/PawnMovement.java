@@ -148,7 +148,7 @@ public class PawnMovement implements MovementPattern {
 
 
     /**
-     * Returns true if the pawn at a specified position was not moved before.
+     * Returns true if the pawn at a specified position was moved before.
      *
      * @param pawnPosition The position of the respective pawn figure.
      * @param owner        The owner (player) of the respective pawn figure.
