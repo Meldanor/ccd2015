@@ -2,7 +2,6 @@ package jchess.game.movement;
 
 import jchess.game.Figure;
 import jchess.game.Gameboard;
-import jchess.game.Position;
 import jchess.game.Position2D;
 
 import java.util.ArrayList;
