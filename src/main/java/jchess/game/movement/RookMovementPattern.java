@@ -16,120 +16,73 @@ import java.util.Optional;
 public class RookMovementPattern implements MovementPattern {
 
 
+    //Direction-Vectors [x, y] for possible rook movements
+    private final static int[] WEST = {0,1};
+    private final static int[] NORTHWEST = {-1,-1};
+    private final static int[] NORTHEAST = {-1,0};
+    private final static int[] EAST = {0,1};
+    private final static int[] SOUTHEAST = {1,1};
+    private final static int[] SOUTHWEST = {1,0};
+
     /**
-     * @param figure     The figure itself.
-     * @param chessboard The chessboard in its current state.
-     * @return A List of all possible moves for this rook-figure.
+     * @param figure        The rook to find the possible moves for.
+     * @param chessboard    The chessboard on which to check for possible moves.
+     * @return A List of all possible moves for the rook.
      */
     @Override
     public List<ChessAction> getPossibleActions(Figure figure, Gameboard chessboard) {
 
-        Position2D pos = chessboard.getPositionOf(figure);
-
         List<ChessAction> actions = new ArrayList<>();
 
-        int y = pos.getY();
-        int x = pos.getX();
-
-        Optional target;
-
         //check to the left
-        while (chessboard.isInField(Position2D.of(x, --y))) {
-            target = chessboard.getFigure(Position2D.of(x, y));
-            if (!target.isPresent()) {
-                actions.add(new ChessAction(ChessAction.ChessActionType.MOVE, figure, Position2D.of(x, y)));
-            } else {
-                if (((Figure) target.get()).isOppositesFigure(figure))
-                    actions.add(new ChessAction(ChessAction.ChessActionType.CAPTURE, figure, Position2D.of(x, y)));
-                break;
-            }
-        }
-
-        //reset
-        y = pos.getY();
-        x = pos.getX();
-
+        actions.addAll(checkDirection(figure,chessboard,WEST));
 
         //check to the top-left
-        while (chessboard.isInField(Position2D.of(--x, --y))) {
-            target = chessboard.getFigure(Position2D.of(x, y));
-            if (!target.isPresent()) {
-                actions.add(new ChessAction(ChessAction.ChessActionType.MOVE, figure, Position2D.of(x, y)));
-            } else {
-                if (((Figure) target.get()).isOppositesFigure(figure))
-                    actions.add(new ChessAction(ChessAction.ChessActionType.CAPTURE, figure, Position2D.of(x, y)));
-                break;
-            }
-        }
-
-        //reset
-        y = pos.getY();
-        x = pos.getX();
-
+        actions.addAll(checkDirection(figure,chessboard,NORTHWEST));
 
         //check to the top-right
-        while (chessboard.isInField(Position2D.of(--x, y))) {
-            target = chessboard.getFigure(Position2D.of(x, y));
-            if (!target.isPresent()) {
-                actions.add(new ChessAction(ChessAction.ChessActionType.MOVE, figure, Position2D.of(x, y)));
-            } else {
-                if (((Figure) target.get()).isOppositesFigure(figure))
-                    actions.add(new ChessAction(ChessAction.ChessActionType.CAPTURE, figure, Position2D.of(x, y)));
-                break;
-            }
-        }
-
-        //reset
-        y = pos.getY();
-        x = pos.getX();
-
+        actions.addAll(checkDirection(figure,chessboard,NORTHEAST));
 
         //check to the right
-        while (chessboard.isInField(Position2D.of(x, ++y))) {
-            target = chessboard.getFigure(Position2D.of(x, y));
-            if (!target.isPresent()) {
-                actions.add(new ChessAction(ChessAction.ChessActionType.MOVE, figure, Position2D.of(x, y)));
-            } else {
-                if (((Figure) target.get()).isOppositesFigure(figure))
-                    actions.add(new ChessAction(ChessAction.ChessActionType.CAPTURE, figure, Position2D.of(x, y)));
-                break;
-            }
-        }
-
-        //reset
-        y = pos.getY();
-        x = pos.getX();
+        actions.addAll(checkDirection(figure,chessboard,EAST));
 
         //check to the bottom-right
-        while (chessboard.isInField(Position2D.of(++x, ++y))) {
-            target = chessboard.getFigure(Position2D.of(x, y));
-            if (!target.isPresent()) {
-                actions.add(new ChessAction(ChessAction.ChessActionType.MOVE, figure, Position2D.of(x, y)));
-            } else {
-                if (((Figure) target.get()).isOppositesFigure(figure))
-                    actions.add(new ChessAction(ChessAction.ChessActionType.CAPTURE, figure, Position2D.of(x, y)));
-                break;
-            }
-        }
-
-
-        //reset
-        y = pos.getY();
-        x = pos.getX();
+        actions.addAll(checkDirection(figure,chessboard,SOUTHEAST));
 
         //check to the bottom-left
-        while (chessboard.isInField(Position2D.of(++x, y))) {
-            target = chessboard.getFigure(Position2D.of(x, y));
-            if (!target.isPresent()) {
-                actions.add(new ChessAction(ChessAction.ChessActionType.MOVE, figure, Position2D.of(x, y)));
-            } else {
-                if (((Figure) target.get()).isOppositesFigure(figure))
-                    actions.add(new ChessAction(ChessAction.ChessActionType.CAPTURE, figure, Position2D.of(x, y)));
-                break;
-            }
-        }
+        actions.addAll(checkDirection(figure,chessboard,SOUTHWEST));
 
 
         return actions;
+    }
+
+    /**
+     *
+     * @param figure        The rook to check for moves in a direction for.
+     * @param chessboard    The chessboard on which to check for possible moves.
+     * @param direction     The direction in which to check for moves.
+     * @return A List of all determined possible moves in the given direction for the given rook figure.
+     */
+    private List<ChessAction> checkDirection(Figure figure, Gameboard chessboard, int[] direction) {
+        Position2D figurePos = chessboard.getPositionOf(figure);
+        Position2D nextPos = Position2D.of(figurePos.getX()+direction[0], figurePos.getY()+direction[1]);
+        List<ChessAction> dirActions = new ArrayList<>();
+
+        Optional target;
+
+        while (chessboard.isInField(nextPos)) {
+            target = chessboard.getFigure(nextPos);
+            if (!target.isPresent()) {
+                dirActions.add(moveTo(figure, nextPos));
+            } else {
+                Figure targetFigure = (Figure) target.get();
+                if (targetFigure.isOppositesFigure(figure)) {
+                    dirActions.add(captureEnemy(figure, targetFigure, nextPos));
+                }
+                break;
+            }
+            nextPos = Position2D.of(nextPos.getX() + direction[0], nextPos.getY() + direction[1]);
+        }
+        return dirActions;
     }
 }
