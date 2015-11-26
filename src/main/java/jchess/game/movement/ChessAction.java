@@ -73,4 +73,20 @@ public class ChessAction<P extends Position> {
          */
         EVOLVE;
     }
+    //Needed for List.contains , possible because contains uses equals()
+    @Override
+    public boolean equals(Object obj) {
+        if( obj.getClass() != ChessAction.class )
+            return super.equals(obj);
+
+        ChessAction other = (ChessAction)obj;
+        return this.getActionType().equals(other.getActionType()) &&
+                this.getEndPosition().equals(other.getEndPosition()) &&
+                this.getOrigin().equals(other.getOrigin());
+    }
+
+    @Override
+    public String toString() {
+       return actionType.toString()+" | "+origin.toString()+" | "+endPosition.toString();
+    }
 }
