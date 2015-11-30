@@ -3,7 +3,9 @@ package jchess.game.movement;
 import javafx.scene.shape.MoveTo;
 import jchess.game.*;
 import jchess.game.Position2D;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -13,12 +15,13 @@ import java.util.*;
  * Created by stephan on 26.11.2015.
  */
 public class KnightMovementTest {
-    //Arrange( Alle Variablen), ACt (TEST machen, erwartetes Ergebnis), Assert(Pruefen)
+    //Arrange(Alle Variablen anlegen), Act (Test laufen lassen, erwartetes Ergebnis), Assert(Pruefen)
 
-    private static final Map<Position2D, Position2D> rows;
-    private static final Map<Position2D, Figure> figures;
+    private static Map<Position2D, Position2D> rows;
+    private static Map<Position2D, Figure> figures;
 
-    static {
+    @BeforeClass
+    public static void init() {
         //Setting up testing environment
         Map<Position2D, Position2D> rowsMap = new HashMap<>();
         rowsMap.put(Position2D.of(0, 0), Position2D.of(0, 7));
@@ -54,81 +57,83 @@ public class KnightMovementTest {
     }
 
     @Test
-    public void KnightCornerTest() throws Exception{
+    public void KnightCornerTest() throws Exception {
         //Arrange
-        HexagonalGameboard gameboard = new HexagonalGameboard(rows,figures);
-        Figure knightInCorner = figures.get(Position2D.of(0,0));
+        HexagonalGameboard gameboard = new HexagonalGameboard(rows, figures);
+        Figure knightInCorner = figures.get(Position2D.of(0, 0));
         KnightMovement knightMovement = new KnightMovement();
         List<ChessAction> expectedActions = new ArrayList<>();
-        expectedActions.add(knightMovement.moveTo(knightInCorner,Position2D.of(3,1)));
-        expectedActions.add(knightMovement.moveTo(knightInCorner,Position2D.of(3,2)));
-        expectedActions.add(knightMovement.moveTo(knightInCorner,Position2D.of(2,3)));
-        expectedActions.add(knightMovement.moveTo(knightInCorner,Position2D.of(1,3)));
+        expectedActions.add(knightMovement.moveTo(knightInCorner, Position2D.of(3, 1)));
+        expectedActions.add(knightMovement.moveTo(knightInCorner, Position2D.of(3, 2)));
+        expectedActions.add(knightMovement.moveTo(knightInCorner, Position2D.of(2, 3)));
+        expectedActions.add(knightMovement.moveTo(knightInCorner, Position2D.of(1, 3)));
         //Act
-        List<ChessAction> actualActions = knightMovement.getPossibleActions(knightInCorner,gameboard);
+        List<ChessAction> actualActions = knightMovement.getPossibleActions(knightInCorner, gameboard);
         //Assert
-        assertEquals(expectedActions.size(),actualActions.size());
-        for (ChessAction expected:expectedActions) {
+        assertEquals(expectedActions.size(), actualActions.size());
+        for (ChessAction expected : expectedActions) {
             assertTrue(actualActions.contains(expected));
         }
     }
+
     @Test
-    public void KnightCentralTest() throws Exception{
+    public void KnightCentralTest() throws Exception {
         //Arrange
-        HexagonalGameboard gameboard = new HexagonalGameboard(rows,figures);
-        Figure knightCentral = figures.get(Position2D.of(3,3));
+        HexagonalGameboard gameboard = new HexagonalGameboard(rows, figures);
+        Figure knightCentral = figures.get(Position2D.of(3, 3));
         KnightMovement knightMovement = new KnightMovement();
         List<ChessAction> expectedActions = new ArrayList<>();
 
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(1,0)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(0,1)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(0,2)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(1,4)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(2,5)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(4,6)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(5,6)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(6,5)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(6,4)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(5,2)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(4,1)));
-        expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(2,0)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(1, 0)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(0, 1)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(0, 2)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(1, 4)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(2, 5)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(4, 6)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(5, 6)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(6, 5)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(6, 4)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(5, 2)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(4, 1)));
+        expectedActions.add(knightMovement.moveTo(knightCentral, Position2D.of(2, 0)));
         //Act
-        List<ChessAction> actualActions = knightMovement.getPossibleActions(knightCentral,gameboard);
+        List<ChessAction> actualActions = knightMovement.getPossibleActions(knightCentral, gameboard);
         //Assert
-        assertEquals(expectedActions.size(),actualActions.size());
-        for (ChessAction expected:expectedActions) {
+        assertEquals(expectedActions.size(), actualActions.size());
+        for (ChessAction expected : expectedActions) {
             assertTrue(actualActions.contains(expected));
         }
     }
+
     @Test
-    public void KnightSurrounded() throws Exception{
+    public void KnightSurrounded() throws Exception {
         //Arrange
-        HexagonalGameboard gameboard = new HexagonalGameboard(rows,figures);
-        Figure knightSurrounded = figures.get(Position2D.of(8,8));
-        Figure kingAllied = figures.get(Position2D.of(11,10));
-        Figure bishopEnemy = figures.get(Position2D.of(5,7));
-        Figure rookEnemy = figures.get(Position2D.of(5,6));
+        HexagonalGameboard gameboard = new HexagonalGameboard(rows, figures);
+        Figure knightSurrounded = figures.get(Position2D.of(8, 8));
+        Figure kingAllied = figures.get(Position2D.of(11, 10));
+        Figure bishopEnemy = figures.get(Position2D.of(5, 7));
+        Figure rookEnemy = figures.get(Position2D.of(5, 6));
         KnightMovement knightMovement = new KnightMovement();
         List<ChessAction> expectedActions = new ArrayList<>();
 
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(6,5)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(5,6)));
-        expectedActions.add(knightMovement.captureEnemy(knightSurrounded,bishopEnemy,Position2D.of(5,7)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(6,9)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(7,10)));
-        expectedActions.add(knightMovement.captureEnemy(knightSurrounded,rookEnemy,Position2D.of(9,11)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(10,11)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(6, 5)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(5, 6)));
+        expectedActions.add(knightMovement.captureEnemy(knightSurrounded, bishopEnemy, Position2D.of(5, 7)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(6, 9)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(7, 10)));
+        expectedActions.add(knightMovement.captureEnemy(knightSurrounded, rookEnemy, Position2D.of(9, 11)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(10, 11)));
         // expectedActions.add(knightMovement.moveTo(knightCentral,Position2D.of(11,10)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(11,9)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(10,7)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(9,6)));
-        expectedActions.add(knightMovement.moveTo(knightSurrounded,Position2D.of(7,5)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(11, 9)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(10, 7)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(9, 6)));
+        expectedActions.add(knightMovement.moveTo(knightSurrounded, Position2D.of(7, 5)));
         //Act
-        List<ChessAction> actualActions = knightMovement.getPossibleActions(knightSurrounded,gameboard);
+        List<ChessAction> actualActions = knightMovement.getPossibleActions(knightSurrounded, gameboard);
 
         //Assert
-        assertEquals(expectedActions.size(),actualActions.size());
-        for (ChessAction expected:expectedActions) {
+        assertEquals(expectedActions.size(), actualActions.size());
+        for (ChessAction expected : expectedActions) {
             assertTrue(actualActions.contains(expected));
         }
     }
