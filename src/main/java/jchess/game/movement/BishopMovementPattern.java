@@ -27,20 +27,30 @@ public class BishopMovementPattern implements MovementPattern {
     private static final int[] SOUTH_WEST = {1, -1};
     private static final int[] NORTH_WEST = {-1, -2};
 
-    public static final int RANGE_UNLIMITED = -1;
-
-    private int maxMoveRange;
+    private int rangeLimitation;
 
 
     /**
-     * Constructor.
-     *
-     * @param maxMoveRange The maximum number of fields a figure can move in a single direction (e.g. for king = 1). A
-     *                     value of {@link #RANGE_UNLIMITED} (-1) means, there is no limitation for the range a figure
-     *                     can move in a single direction.
+     * Constructor without arguments. The range that a figure can move in a single direction will NOT be limited by a
+     * fixed value.
      */
-    public BishopMovementPattern(int maxMoveRange) {
-        this.maxMoveRange = maxMoveRange;
+    public BishopMovementPattern() {
+        this.rangeLimitation = -1;
+    }
+
+
+    /**
+     * Constructor with an argument to limit the range a figure can move.
+     *
+     * @param rangeLimitation The maximum number of fields a figure will be able to move in a single direction (e.g.
+     *                        for king = 1). Only positive values are allowed.
+     * @throws IllegalArgumentException if {@link #rangeLimitation} is a negative number.
+     */
+    public BishopMovementPattern(int rangeLimitation) {
+        if (rangeLimitation < 0) {
+            throw new IllegalArgumentException("Move range can not be negative");
+        }
+        this.rangeLimitation = rangeLimitation;
     }
 
 
@@ -79,7 +89,10 @@ public class BishopMovementPattern implements MovementPattern {
         int nextY = latestValidPosition.getY() + changeInY;
         Position2D nextPosition = Position2D.of(nextX, nextY);
 
-        while (chessboard.isInField(nextPosition)) {
+        int remainingMoves = this.rangeLimitation;
+        while (chessboard.isInField(nextPosition) && remainingMoves != 0) {
+            remainingMoves--;
+
             List<Position2D> identicalNeighbors = chessboard.getNeighbors(latestValidPosition);
             identicalNeighbors.retainAll(chessboard.getNeighbors(nextPosition));
 
