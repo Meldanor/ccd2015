@@ -166,7 +166,7 @@ public class PawnMovement implements MovementPattern {
                 }
             }
         } else if (owner == HexagonalPlayerType.GRAY) {
-            for (int x = 4, y = 1; x <= 12; x++) {
+            for (int x = 4, y = 11; x <= 12; x++) {
                 if (pawnPosition.getX() == x && pawnPosition.getY() == y) {
                     return false;
                 }
