@@ -13,6 +13,8 @@ import java.util.stream.Stream;
  */
 public class HexagonalGameboard implements Gameboard<Position2D> {
 
+    private static Figure EMPTY_SPACE = new FigureBuilder<>("", null, () -> 0).build();
+
     private Map<Position2D, Figure> chessBoard;
     private Map<Figure, Position2D> figurePosition;
 
@@ -38,7 +40,7 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
 
             for (int y = entry.getKey().getY(); y <= entry.getValue().getY(); y++) {
                 Position2D pos = Position2D.of(x, y);
-                Figure figure = figures.getOrDefault(pos, EmptySpace.get());
+                Figure figure = figures.getOrDefault(pos, EMPTY_SPACE);
                 map.put(pos, figure);
             }
         }
@@ -52,7 +54,7 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
         if (figure == null) {
             throw new ArrayIndexOutOfBoundsException("The position" + position + "is outside the field!");
         }
-        return figure != EmptySpace.get() ? Optional.of(figure) : Optional.empty();
+        return figure != EMPTY_SPACE ? Optional.of(figure) : Optional.empty();
     }
 
     @Override
@@ -78,7 +80,7 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
         this.chessBoard.put(end, startFigure.get());
         this.figurePosition.put(startFigure.get(), end);
 
-        this.chessBoard.put(start, EmptySpace.get());
+        this.chessBoard.put(start, EMPTY_SPACE);
         if (endPositionFigure.isPresent())
             this.figurePosition.remove(endPositionFigure.get());
 
@@ -109,7 +111,7 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
     @Override
     public Map<Position2D, Figure> getAllFigures() {
         return chessBoard.entrySet().stream()
-            .filter(e -> e.getValue() != EmptySpace.get())
+            .filter(e -> e.getValue() != EMPTY_SPACE)
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

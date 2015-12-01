@@ -2,6 +2,7 @@ package jchess.event;
 
 import jchess.event.impl.FigureCapturedEvent;
 import jchess.event.impl.FigureMovedEvent;
+import jchess.game.FigureMock;
 import jchess.game.Figure;
 import jchess.game.Position;
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class EventBroadcasterTest {
     public void testEventTrigger() throws Exception {
 
         // Data mocks
-        Figure figureMock = mock(Figure.class);
+        Figure figureMock = FigureMock.create();
         Position startPos = mock(Position.class);
         Position endPos = mock(Position.class);
 
@@ -77,7 +78,7 @@ public class EventBroadcasterTest {
     public void testNoEventTrigger() throws Exception {
 
         // Data mocks
-        Figure figureMock = mock(Figure.class);
+        Figure figureMock = FigureMock.create();
         Position pos = mock(Position.class);
 
         // Register for another event, so this callback should NOT get invoked.

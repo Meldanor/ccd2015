@@ -26,17 +26,17 @@ public class BishopMovementPatternTest {
         GameboardCreator.FigureSetter figureSetter = new GameboardCreator.FigureSetter();
 
         // The bishop figure that will be tested in here.
-        figureSetter.putFigure(Position2D.of(7, 6), GameboardCreator.FigureSetup.bishop(HexagonalPlayerType.WHITE));
+        figureSetter.putFigure(Position2D.of(7, 6), DefaultFigures.bishop(HexagonalPlayerType.WHITE));
 
         // Used to test the bishop's action, when a figure of the same color is on one of its possible positions.
-        figureSetter.putFigure(Position2D.of(3, 4), GameboardCreator.FigureSetup.pawn(HexagonalPlayerType.WHITE));
+        figureSetter.putFigure(Position2D.of(3, 4), DefaultFigures.pawn(HexagonalPlayerType.WHITE));
 
         // Used to test the bishop's action, when 2 of the bishop's neighbors block the way.
-        figureSetter.putFigure(Position2D.of(6, 6), GameboardCreator.FigureSetup.bishop(HexagonalPlayerType.BLACK));
-        figureSetter.putFigure(Position2D.of(7, 7), GameboardCreator.FigureSetup.bishop(HexagonalPlayerType.BLACK));
+        figureSetter.putFigure(Position2D.of(6, 6), DefaultFigures.bishop(HexagonalPlayerType.BLACK));
+        figureSetter.putFigure(Position2D.of(7, 7), DefaultFigures.bishop(HexagonalPlayerType.BLACK));
 
         // Used to test the capturing of an enemy.
-        figureSetter.putFigure(Position2D.of(8, 5), GameboardCreator.FigureSetup.bishop(HexagonalPlayerType.GRAY));
+        figureSetter.putFigure(Position2D.of(8, 5), DefaultFigures.bishop(HexagonalPlayerType.GRAY));
 
         HexagonalGameboard gameboard = figureSetter.createGameboard();
 
@@ -63,14 +63,14 @@ public class BishopMovementPatternTest {
         GameboardCreator.FigureSetter figureSetter = new GameboardCreator.FigureSetter();
 
         // The bishop figure that will be tested in here.
-        figureSetter.putFigure(Position2D.of(5, 12), GameboardCreator.FigureSetup.bishop(HexagonalPlayerType.BLACK));
+        figureSetter.putFigure(Position2D.of(5, 12), DefaultFigures.bishop(HexagonalPlayerType.BLACK));
 
         // Figure that can be caught by the bishop.
-        figureSetter.putFigure(Position2D.of(3, 8), GameboardCreator.FigureSetup.pawn(HexagonalPlayerType.WHITE));
+        figureSetter.putFigure(Position2D.of(3, 8), DefaultFigures.pawn(HexagonalPlayerType.WHITE));
 
         // Figures that blocks the way of the bishop. Can not be caught.
-        figureSetter.putFigure(Position2D.of(7, 9), GameboardCreator.FigureSetup.pawn(HexagonalPlayerType.WHITE));
-        figureSetter.putFigure(Position2D.of(8, 10), GameboardCreator.FigureSetup.pawn(HexagonalPlayerType.GRAY));
+        figureSetter.putFigure(Position2D.of(7, 9), DefaultFigures.pawn(HexagonalPlayerType.WHITE));
+        figureSetter.putFigure(Position2D.of(8, 10), DefaultFigures.pawn(HexagonalPlayerType.GRAY));
 
         HexagonalGameboard gameboard = figureSetter.createGameboard();
 
