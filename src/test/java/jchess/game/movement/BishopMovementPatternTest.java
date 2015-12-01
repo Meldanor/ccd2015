@@ -114,4 +114,40 @@ public class BishopMovementPatternTest {
 
     }
 
+
+    /**
+     * Test the range limitation.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testRangeLimitation() throws Exception {
+        GameboardCreator.FigureSetter figureSetter = new GameboardCreator.FigureSetter();
+
+        // The bishop figure, whose range will be limited to 1.
+        figureSetter.putFigure(Position2D.of(6, 6), GameboardCreator.FigureSetup.bishop(HexagonalPlayerType.GRAY));
+
+        HexagonalGameboard gameboard = figureSetter.createGameboard();
+
+        Figure limitedBishop = gameboard.getFigure(Position2D.of(6, 6)).get();
+
+        BishopMovementPattern limitedBishopMoves = new BishopMovementPattern(1);
+        List<ChessAction> possibleActions = limitedBishopMoves.getPossibleActions(limitedBishop, gameboard);
+
+        List<ChessAction> expectedActions = new ArrayList<>();
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(4, 5)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(5, 7)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(7, 8)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(8, 7)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(7, 5)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(5, 4)));
+
+        assertEquals(possibleActions.size(), expectedActions.size());
+
+        for (ChessAction expected : expectedActions) {
+            assertTrue(possibleActions.contains(expected));
+        }
+
+    }
+
 }
