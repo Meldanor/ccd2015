@@ -1,24 +1,47 @@
 package jchess.game.movement;
 
-import jchess.game.*;
+import jchess.game.Figure;
+import jchess.game.Gameboard;
+import jchess.game.Position2D;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
- * Provides a list of possible {@link ChessAction} for a bishop figure
+ * Provides a list of possible {@link ChessAction} for a figure, that uses the movement patterns of a bishop figure. In
+ * the base version of the Three-Person-Chess-Game, this movement pattern can not only be used by the bishop, but also
+ * as part of the movement patterns of the king and queen figures.
  *
  * @since 17.11.2015.
  */
-public class BishopMovement implements MovementPattern {
 
+public class BishopMovementPattern implements MovementPattern {
+
+    // These arrays contain the changes of the x- and y-coordinate when performing a diagonal move along the specified
+    // direction.
     private static final int[] NORTH = {-2, -1};
     private static final int[] NORTH_EAST = {-1, 1};
     private static final int[] SOUTH_EAST = {1, 2};
     private static final int[] SOUTH = {2, 1};
     private static final int[] SOUTH_WEST = {1, -1};
     private static final int[] NORTH_WEST = {-1, -2};
+
+    public static final int RANGE_UNLIMITED = -1;
+
+    private int maxMoveRange;
+
+
+    /**
+     * Constructor.
+     *
+     * @param maxMoveRange The maximum number of fields a figure can move in a single direction (e.g. for king = 1). A
+     *                     value of {@link #RANGE_UNLIMITED} (-1) means, there is no limitation for the range a figure
+     *                     can move in a single direction.
+     */
+    public BishopMovementPattern(int maxMoveRange) {
+        this.maxMoveRange = maxMoveRange;
+    }
 
 
     @Override
@@ -37,21 +60,21 @@ public class BishopMovement implements MovementPattern {
 
 
     /**
-     * Checks all possible {@link ChessAction} for the bishop along a single direction.
+     * Checks all possible {@link ChessAction} for the figure along a single direction.
      *
      * @param chessboard The chessboard in its current state.
-     * @param bishop     The respective bishop figure.
+     * @param figure     The figure.
      * @param direction  An array containing the changes of the x- and y-coordinate along a specific direction.
      * @return A non-null list (can be empty) containing possible actions along the specified direction. An empty list
-     * indicates, that the bishop cannot do anything along this direction.
+     * indicates, that the figure cannot do anything along this direction.
      */
-    private List<ChessAction> checkDirection(Figure bishop, Gameboard chessboard, int[] direction) {
+    private List<ChessAction> checkDirection(Figure figure, Gameboard chessboard, int[] direction) {
         List<ChessAction> possibleActionsInDirection = new ArrayList<>();
 
         int changeInX = direction[0];
         int changeInY = direction[1];
 
-        Position2D latestValidPosition = chessboard.getPositionOf(bishop);
+        Position2D latestValidPosition = chessboard.getPositionOf(figure);
         int nextX = latestValidPosition.getX() + changeInX;
         int nextY = latestValidPosition.getY() + changeInY;
         Position2D nextPosition = Position2D.of(nextX, nextY);
@@ -63,16 +86,21 @@ public class BishopMovement implements MovementPattern {
             Optional<Figure> identicalNeighbor1 = chessboard.getFigure(identicalNeighbors.get(0));
             Optional<Figure> identicalNeighbor2 = chessboard.getFigure(identicalNeighbors.get(1));
 
+            // The figure can not perform a diagonal move to the next position in the specified direction, if the way to
+            // it is blocked by two other figures.
             if (identicalNeighbor1.isPresent() == false || identicalNeighbor2.isPresent() == false) {
                 Optional<Figure> nextPositionFigure = chessboard.getFigure(nextPosition);
 
                 if (nextPositionFigure.isPresent() == false) {
-                    possibleActionsInDirection.add(this.moveTo(bishop, nextPosition));
+                    possibleActionsInDirection.add(this.moveTo(figure, nextPosition));
                 } else {
                     Figure target = nextPositionFigure.get();
-                    if (target.isOppositesFigure(bishop)) {
-                        possibleActionsInDirection.add(this.captureEnemy(bishop, target, nextPosition));
+                    if (target.isOppositesFigure(figure)) {
+                        possibleActionsInDirection.add(this.captureEnemy(figure, target, nextPosition));
                     }
+
+                    // Leave the while loop, because the figure can not jump over an other figure that is directly
+                    // in its way.
                     break;
                 }
 
