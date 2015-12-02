@@ -87,10 +87,10 @@ public class KnightMovementTest {
         figureSetter.putFigure(Position2D.of(11, 10), DefaultFigures.king(HexagonalPlayerType.WHITE));
 
         HexagonalGameboard gameboard = figureSetter.createGameboard();
-        Figure knightSurrounded =  gameboard.getFigure(Position2D.of(8, 8)).get();
-        Figure bishopEnemy =  gameboard.getFigure(Position2D.of(5, 7)).get();
-        Figure rookEnemy =  gameboard.getFigure(Position2D.of(9, 11)).get();
-        Figure kingAllied =  gameboard.getFigure(Position2D.of(11, 10)).get();
+        Figure knightSurrounded = gameboard.getFigure(Position2D.of(8, 8)).get();
+        Figure bishopEnemy = gameboard.getFigure(Position2D.of(5, 7)).get();
+        Figure rookEnemy = gameboard.getFigure(Position2D.of(9, 11)).get();
+        Figure kingAllied = gameboard.getFigure(Position2D.of(11, 10)).get();
         KnightMovement knightMovement = new KnightMovement();
 
         List<ChessAction> expectedActions = new ArrayList<>();
