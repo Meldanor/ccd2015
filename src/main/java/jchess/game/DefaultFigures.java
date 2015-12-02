@@ -3,13 +3,14 @@ package jchess.game;
 import jchess.game.movement.BishopMovementPattern;
 import jchess.game.movement.KnightMovement;
 import jchess.game.movement.PawnMovement;
+import jchess.game.movement.RookMovementPattern;
 
 /**
  * A set of the default chess figures and their movement.
  *
  * @since 01.12.2015
  */
-public class DefaultFigures {
+public final class DefaultFigures {
 
     private DefaultFigures() {
 
@@ -64,11 +65,8 @@ public class DefaultFigures {
      */
     @SuppressWarnings("unchecked")
     public static <P extends Position2D, G extends Gameboard<P>> Figure rook(PlayerType<G> owner) {
-        // TODO: Replace pattern with real rook pattern
         return new FigureBuilder<>("Rook", FigureType.ROOK, owner)
-            .movement((figure, chessboard) -> {
-                throw new AssertionError("Not yet implemented!");
-            })
+            .movement(new RookMovementPattern())
             .build();
     }
 
@@ -83,10 +81,7 @@ public class DefaultFigures {
     @SuppressWarnings("unchecked")
     public static <P extends Position2D, G extends Gameboard<P>> Figure queen(PlayerType<G> owner) {
         return new FigureBuilder<>("Queen", FigureType.QUEEN, owner)
-            // TODO: Replace pattern with real rook pattern
-            .movement((figure, chessboard) -> {
-                throw new AssertionError("Rook movement not yet implemented!");
-            })
+            .movement(new RookMovementPattern())
             .movement(new BishopMovementPattern())
             .build();
     }
@@ -102,10 +97,7 @@ public class DefaultFigures {
     @SuppressWarnings("unchecked")
     public static <P extends Position2D, G extends Gameboard<P>> Figure king(PlayerType<G> owner) {
         return new FigureBuilder<>("King", FigureType.KING, owner)
-            // TODO: Replace pattern with real rook pattern
-            .movement((figure, chessboard) -> {
-                throw new AssertionError("Rook movement not yet implemented!");
-            })
+            .movement(new RookMovementPattern(1))
             .movement(new BishopMovementPattern(1))
             .build();
     }
