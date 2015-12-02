@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,37 +19,6 @@ public class RookMovementPatternTest {
 
     private Map<Position2D, Position2D> rows = new HashMap<>();
     private Map<Position2D, Figure> figures = new HashMap<>();
-
-
-    private static class FigureSetup extends Figure {
-        FigureSetup(String name, FigureType type, HexagonalPlayerType player) {
-            super(name, type, player);
-        }
-
-        static Figure pawn(HexagonalPlayerType player) {
-            return new FigureSetup("Pawn", FigureType.PAWN, player);
-        }
-
-        static Figure rook(HexagonalPlayerType player) {
-            return new FigureSetup("Rook", FigureType.ROOK, player);
-        }
-
-        static Figure bishop(HexagonalPlayerType player) {
-            return new FigureSetup("Bishop", FigureType.BISHOP, player);
-        }
-
-        static Figure knight(HexagonalPlayerType player) {
-            return new FigureSetup("Knight", FigureType.KNIGHT, player);
-        }
-
-        static Figure queen(HexagonalPlayerType player) {
-            return new FigureSetup("Queen", FigureType.QUEEN, player);
-        }
-
-        static Figure king(HexagonalPlayerType player) {
-            return new FigureSetup("King", FigureType.KING, player);
-        }
-    }
 
     @Before
     public void before() {
@@ -70,7 +38,7 @@ public class RookMovementPatternTest {
         rows.put(Position2D.of(12, 7), Position2D.of(12, 12));
 
         // The rook figure that will be tested in here.
-        figures.put(Position2D.of(0, 0), FigureSetup.rook(HexagonalPlayerType.WHITE));
+        figures.put(Position2D.of(0, 0), DefaultFigures.rook(HexagonalPlayerType.WHITE));
 
     }
 
