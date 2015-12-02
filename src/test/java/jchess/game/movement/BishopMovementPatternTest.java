@@ -125,7 +125,7 @@ public class BishopMovementPatternTest {
         GameboardCreator.FigureSetter figureSetter = new GameboardCreator.FigureSetter();
 
         // The bishop figure, whose range will be limited to 1.
-        figureSetter.putFigure(Position2D.of(6, 6), GameboardCreator.FigureSetup.bishop(HexagonalPlayerType.GRAY));
+        figureSetter.putFigure(Position2D.of(6, 6), DefaultFigures.bishop(HexagonalPlayerType.GRAY));
 
         HexagonalGameboard gameboard = figureSetter.createGameboard();
 
