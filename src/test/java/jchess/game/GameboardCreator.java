@@ -97,41 +97,4 @@ public class GameboardCreator extends HexagonalGameboard {
             return new GameboardCreator(Collections.unmodifiableMap(figuresMap));
         }
     }
-
-
-    /**
-     * Used for fast creation of a figure.
-     */
-    public static class FigureSetup extends Figure {
-
-        public FigureSetup(String name, FigureType type, HexagonalPlayerType player) {
-            super(name, type, player);
-        }
-
-        public static Figure pawn(HexagonalPlayerType player) {
-            return new FigureSetup("Pawn", FigureType.PAWN, player);
-        }
-
-        public static Figure rook(HexagonalPlayerType player) {
-            return new FigureSetup("Rook", FigureType.ROOK, player);
-        }
-
-        public static Figure bishop(HexagonalPlayerType player) {
-            return new FigureSetup("Bishop", FigureType.BISHOP, player);
-        }
-
-        public static Figure knight(HexagonalPlayerType player) {
-            return new FigureSetup("Knight", FigureType.KNIGHT, player);
-        }
-
-        public static Figure queen(HexagonalPlayerType player) {
-            return new FigureSetup("Queen", FigureType.QUEEN, player);
-        }
-
-        public static Figure king(HexagonalPlayerType player) {
-            return new FigureSetup("King", FigureType.KING, player);
-        }
-
-    }
-
 }

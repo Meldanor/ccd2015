@@ -1,14 +1,13 @@
 package jchess.game.movement;
 
-import javafx.scene.shape.MoveTo;
 import jchess.game.*;
-import jchess.game.Position2D;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test knight movements
@@ -42,15 +41,15 @@ public class KnightMovementTest {
         Map<Position2D, Figure> figuresMap = new HashMap<>();
 
         //Test 1: Knight Position border
-        figuresMap.put(Position2D.of(0, 0), FigureSetup.knight(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 0), DefaultFigures.knight(HexagonalPlayerType.WHITE));
         //Test 2: Knight Position central
-        figuresMap.put(Position2D.of(3, 3), FigureSetup.knight(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(3, 3), DefaultFigures.knight(HexagonalPlayerType.WHITE));
 
         //Test 3: Knight Position with surround figures, enemy bishop, enemy rook and allied king
-        figuresMap.put(Position2D.of(8, 8), FigureSetup.knight(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(5, 7), FigureSetup.bishop(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(9, 11), FigureSetup.rook(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(11, 10), FigureSetup.king(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(8, 8), DefaultFigures.knight(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(5, 7), DefaultFigures.bishop(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(9, 11), DefaultFigures.rook(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(11, 10), DefaultFigures.king(HexagonalPlayerType.WHITE));
 
 
         figures = Collections.unmodifiableMap(figuresMap);
@@ -135,36 +134,6 @@ public class KnightMovementTest {
         assertEquals(expectedActions.size(), actualActions.size());
         for (ChessAction expected : expectedActions) {
             assertTrue(actualActions.contains(expected));
-        }
-    }
-
-    private static class FigureSetup extends Figure {
-        FigureSetup(String name, FigureType type, HexagonalPlayerType player) {
-            super(name, type, player);
-        }
-
-        static Figure pawn(HexagonalPlayerType player) {
-            return new FigureSetup("Pawn", FigureType.PAWN, player);
-        }
-
-        static Figure rook(HexagonalPlayerType player) {
-            return new FigureSetup("Rook", FigureType.ROOK, player);
-        }
-
-        static Figure bishop(HexagonalPlayerType player) {
-            return new FigureSetup("Bishop", FigureType.BISHOP, player);
-        }
-
-        static Figure knight(HexagonalPlayerType player) {
-            return new FigureSetup("Knight", FigureType.KNIGHT, player);
-        }
-
-        static Figure queen(HexagonalPlayerType player) {
-            return new FigureSetup("Queen", FigureType.QUEEN, player);
-        }
-
-        static Figure king(HexagonalPlayerType player) {
-            return new FigureSetup("King", FigureType.KING, player);
         }
     }
 }
