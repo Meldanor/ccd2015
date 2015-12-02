@@ -51,7 +51,7 @@ public class DefaultFigures {
      */
     @SuppressWarnings("unchecked")
     public static <P extends Position2D, G extends Gameboard<P>> Figure bishop(PlayerType<G> owner) {
-        return new FigureBuilder<>("Bishop", FigureType.BISHOP, owner).movement(new BishopMovementPattern(-1)).build();
+        return new FigureBuilder<>("Bishop", FigureType.BISHOP, owner).movement(new BishopMovementPattern()).build();
     }
 
     /**
@@ -87,7 +87,7 @@ public class DefaultFigures {
             .movement((figure, chessboard) -> {
                 throw new AssertionError("Rook movement not yet implemented!");
             })
-            .movement(new BishopMovementPattern(-1))
+            .movement(new BishopMovementPattern())
             .build();
     }
 
@@ -106,7 +106,7 @@ public class DefaultFigures {
             .movement((figure, chessboard) -> {
                 throw new AssertionError("Rook movement not yet implemented!");
             })
-            .movement(new BishopMovementPattern(-1))
+            .movement(new BishopMovementPattern(1))
             .build();
     }
 }
