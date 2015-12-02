@@ -16,15 +16,37 @@ import java.util.Optional;
 public class RookMovementPattern implements MovementPattern {
 
 
-    //Direction-Vectors [x, y] for possible rook movements
-    private final static int[] WEST = {0,1};
+    //Direction-Vectors [x, y] for possible rook movements (stepwise)
+    private final static int[] WEST = {0,-1};
     private final static int[] NORTHWEST = {-1,-1};
     private final static int[] NORTHEAST = {-1,0};
     private final static int[] EAST = {0,1};
     private final static int[] SOUTHEAST = {1,1};
     private final static int[] SOUTHWEST = {1,0};
 
+    private int range;
+
     /**
+     * Default constructor. The MovementPattern computes all possible moves on the given gameboard.
+     */
+    public RookMovementPattern()
+    {
+        this.range = Integer.MAX_VALUE;
+    }
+
+    /**
+     * Constructs a MovementPattern with a limited number of steps to be taken.
+     *
+     * @param range Maximum number of fields the corresponding figure is allowed to move.
+     */
+    public RookMovementPattern(int range)
+    {
+        this.range = range;
+    }
+
+    /**
+     * Checks for possible moves in
+     *
      * @param figure        The rook to find the possible moves for.
      * @param chessboard    The chessboard on which to check for possible moves.
      * @return A List of all possible moves for the rook.
@@ -70,7 +92,9 @@ public class RookMovementPattern implements MovementPattern {
 
         Optional target;
 
-        while (chessboard.isInField(nextPos)) {
+        int steps = 0;
+
+        while (chessboard.isInField(nextPos) && steps < range) {
             target = chessboard.getFigure(nextPos);
             if (!target.isPresent()) {
                 dirActions.add(moveTo(figure, nextPos));
@@ -81,7 +105,9 @@ public class RookMovementPattern implements MovementPattern {
                 }
                 break;
             }
+            steps++;
             nextPos = Position2D.of(nextPos.getX() + direction[0], nextPos.getY() + direction[1]);
+
         }
         return dirActions;
     }
