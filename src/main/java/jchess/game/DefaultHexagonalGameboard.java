@@ -36,77 +36,47 @@ public class DefaultHexagonalGameboard extends HexagonalGameboard {
 
         // White
         for (int x = 1, y = 0; y <= 8; y++) {
-            figuresMap.put(Position2D.of(x, y), FigureStup.pawn(HexagonalPlayerType.WHITE));
+            figuresMap.put(Position2D.of(x, y), DefaultFigures.pawn(HexagonalPlayerType.WHITE));
         }
-        figuresMap.put(Position2D.of(0, 0), FigureStup.rook(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(0, 1), FigureStup.knight(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(0, 2), FigureStup.bishop(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(0, 3), FigureStup.queen(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(0, 4), FigureStup.king(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(0, 5), FigureStup.knight(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(0, 6), FigureStup.bishop(HexagonalPlayerType.WHITE));
-        figuresMap.put(Position2D.of(0, 7), FigureStup.rook(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 0), DefaultFigures.rook(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 1), DefaultFigures.knight(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 2), DefaultFigures.bishop(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 3), DefaultFigures.queen(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 4), DefaultFigures.king(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 5), DefaultFigures.knight(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 6), DefaultFigures.bishop(HexagonalPlayerType.WHITE));
+        figuresMap.put(Position2D.of(0, 7), DefaultFigures.rook(HexagonalPlayerType.WHITE));
 
         // Black
         for (int x = 4, y = 0; y <= 8; x++, y++) {
-            figuresMap.put(Position2D.of(x, y), FigureStup.pawn(HexagonalPlayerType.BLACK));
+            figuresMap.put(Position2D.of(x, y), DefaultFigures.pawn(HexagonalPlayerType.BLACK));
         }
-        figuresMap.put(Position2D.of(5, 0), FigureStup.rook(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(6, 1), FigureStup.bishop(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(7, 2), FigureStup.knight(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(8, 3), FigureStup.king(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(9, 4), FigureStup.queen(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(10, 5), FigureStup.bishop(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(11, 6), FigureStup.knight(HexagonalPlayerType.BLACK));
-        figuresMap.put(Position2D.of(12, 7), FigureStup.rook(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(5, 0), DefaultFigures.rook(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(6, 1), DefaultFigures.bishop(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(7, 2), DefaultFigures.knight(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(8, 3), DefaultFigures.king(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(9, 4), DefaultFigures.queen(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(10, 5), DefaultFigures.bishop(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(11, 6), DefaultFigures.knight(HexagonalPlayerType.BLACK));
+        figuresMap.put(Position2D.of(12, 7), DefaultFigures.rook(HexagonalPlayerType.BLACK));
 
         // Gray
         for (int x = 4, y = 1; x <= 12; x++) {
-            figuresMap.put(Position2D.of(x, y), FigureStup.pawn(HexagonalPlayerType.GRAY));
+            figuresMap.put(Position2D.of(x, y), DefaultFigures.pawn(HexagonalPlayerType.GRAY));
         }
-        figuresMap.put(Position2D.of(5, 12), FigureStup.rook(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(6, 12), FigureStup.knight(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(7, 12), FigureStup.bishop(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(8, 12), FigureStup.queen(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(9, 12), FigureStup.king(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(10, 12), FigureStup.knight(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(11, 12), FigureStup.bishop(HexagonalPlayerType.GRAY));
-        figuresMap.put(Position2D.of(12, 12), FigureStup.rook(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(5, 12), DefaultFigures.rook(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(6, 12), DefaultFigures.knight(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(7, 12), DefaultFigures.bishop(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(8, 12), DefaultFigures.queen(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(9, 12), DefaultFigures.king(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(10, 12), DefaultFigures.knight(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(11, 12), DefaultFigures.bishop(HexagonalPlayerType.GRAY));
+        figuresMap.put(Position2D.of(12, 12), DefaultFigures.rook(HexagonalPlayerType.GRAY));
 
         figures = Collections.unmodifiableMap(figuresMap);
     }
 
     public DefaultHexagonalGameboard() {
         super(rows, figures);
-    }
-
-    private static class FigureStup extends Figure {
-        FigureStup(String name, FigureType type, HexagonalPlayerType player) {
-            super(name, type, player);
-        }
-
-        static Figure pawn(HexagonalPlayerType player) {
-            return new FigureStup("Pawn", FigureType.PAWN, player);
-        }
-
-        static Figure rook(HexagonalPlayerType player) {
-            return new FigureStup("Rook", FigureType.ROOK,player);
-        }
-
-        static Figure bishop(HexagonalPlayerType player) {
-            return new FigureStup("Bishop", FigureType.BISHOP,player);
-        }
-
-        static Figure knight(HexagonalPlayerType player) {
-            return new FigureStup("Knight", FigureType.KNIGHT,player);
-        }
-
-        static Figure queen(HexagonalPlayerType player) {
-            return new FigureStup("Queen", FigureType.QUEEN,player);
-        }
-
-        static Figure king(HexagonalPlayerType player) {
-            return new FigureStup("King", FigureType.KING,player);
-        }
     }
 }
