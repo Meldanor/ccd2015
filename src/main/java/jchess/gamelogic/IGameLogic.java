@@ -1,6 +1,5 @@
 package jchess.gamelogic;
 
-import jchess.Player;
 import java.util.List;
 
 /**
