@@ -18,8 +18,8 @@ import java.util.Map;
  */
 public class RookMovementPatternTest {
 
-    private Map<Position2D, Position2D> rows;
-    private Map<Position2D, Figure> figures;
+    private Map<Position2D, Position2D> rows = new HashMap<>();
+    private Map<Position2D, Figure> figures = new HashMap<>();
 
 
     private static class FigureSetup extends Figure {
@@ -76,9 +76,10 @@ public class RookMovementPatternTest {
 
     /**
      * Tests the movement of the rook when it's the only figure on the board.
+     *
      */
     @Test
-    public void testOnlyRook() {
+    public void testOnlyRook() throws Exception {
 
         HexagonalGameboard gameboard = new HexagonalGameboard(rows, figures);
 
@@ -88,7 +89,43 @@ public class RookMovementPatternTest {
 
         List<ChessAction> actions = moves.getPossibleActions(rook, gameboard);
 
-        assertEquals(0+0+0+5+7+11, actions.size());
+        assertEquals(0 + 0 + 0 + 5 + 7 + 12, actions.size());
+    }
+
+
+    /**
+     * Tests the limited movement of the rook when it's the only figure on the board.
+     *
+     */
+    @Test
+    public void testLimitedRook() throws Exception {
+        HexagonalGameboard gameboard = new HexagonalGameboard(rows, figures);
+
+        Figure rook = gameboard.getFigure(Position2D.of(0, 0)).get();
+
+        RookMovementPattern moves = new RookMovementPattern(2);
+
+        List<ChessAction> actions = moves.getPossibleActions(rook, gameboard);
+
+        assertEquals(0 + 0 + 0 + 2 + 2 + 2, actions.size());
+    }
+
+
+    /**
+     * Tests the movements of the rook when it's surrounded by friendly figures (as in the starting position).
+     *
+     */
+    @Test
+    public void testStandardStart() throws Exception {
+        HexagonalGameboard gameboard = new DefaultHexagonalGameboard();
+
+        Figure rook = gameboard.getFigure(Position2D.of(0,0)).get();
+
+        RookMovementPattern moves = new RookMovementPattern();
+
+        List<ChessAction> actions = moves.getPossibleActions(rook, gameboard);
+
+        assertEquals(0, actions.size());
     }
 
 }
