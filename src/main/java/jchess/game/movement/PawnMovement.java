@@ -13,6 +13,8 @@ import java.util.Optional;
  */
 public class PawnMovement implements MovementPattern {
 
+    // These arrays contain the changes of the x- and y-coordinate when performing a move or a capture action with the
+    // different pawns (depending on color/player).
     private static final int[] WHITE_MOVE1 = {1, 0};
     private static final int[] WHITE_MOVE2 = {1, 1};
     private static final int[] WHITE_CAPTURE1 = {1, -1};
@@ -87,6 +89,8 @@ public class PawnMovement implements MovementPattern {
         if (chessboard.getFigure(nextPosition).isPresent() == false) {
             possibleMoveActions.add(this.moveTo(pawn, nextPosition));
 
+            // If a pawn is still at his original position (i.e. was not moved before), he is allowed to move twice as
+            // far as usual.
             if (wasMovedBefore == false) {
                 nextX = pawnPosition.getX() + 2 * changeInX;
                 nextY = pawnPosition.getY() + 2 * changeInY;
@@ -133,6 +137,8 @@ public class PawnMovement implements MovementPattern {
                 Optional<Figure> identicalNeighbor1 = chessboard.getFigure(identicalNeighbors.get(0));
                 Optional<Figure> identicalNeighbor2 = chessboard.getFigure(identicalNeighbors.get(1));
 
+                // The pawn can not perform a diagonal move to capture an enemy, if the way to the enemy is blocked by
+                // two other figures.
                 if (identicalNeighbor1.isPresent() == false || identicalNeighbor2.isPresent() == false) {
                     Figure target = nextPositionFigure.get();
 
