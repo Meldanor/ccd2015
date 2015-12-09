@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test the movements of the bishop movement pattern.
@@ -15,9 +16,9 @@ import static org.junit.Assert.assertEquals;
 public class BishopMovementPatternTest {
 
     /**
-     * Specifies the position of figures for a test of the bishop figure and checks, whether the number of returned
-     * possible {@link ChessAction} from {@link BishopMovementPattern} equals the expected number (manually checked) of
-     * {@link ChessAction}.
+     * Specifies the position of figures for a test of the bishop figure and checks, whether the expected
+     * {@link ChessAction} (manually checked) are equal to those returned by
+     * {@link BishopMovementPattern#getPossibleActions(Figure, Gameboard)}.
      *
      * @throws Exception
      */
@@ -41,20 +42,38 @@ public class BishopMovementPatternTest {
         HexagonalGameboard gameboard = figureSetter.createGameboard();
 
         Figure whiteBishop = gameboard.getFigure(Position2D.of(7, 6)).get();
+        Figure blackBishop = gameboard.getFigure(Position2D.of(8, 5)).get();
 
-        BishopMovementPattern bishopMoves = new BishopMovementPattern(BishopMovementPattern.RANGE_UNLIMITED);
+        BishopMovementPattern bishopMoves = new BishopMovementPattern();
         List<ChessAction> possibleActions = bishopMoves.getPossibleActions(whiteBishop, gameboard);
 
-        // Test the sum of the possible ChessActions in each direction.
-        assertEquals(1 + 0 + 3 + 2 + 1 + 3, possibleActions.size());
+
+        // Create a manually checked list of ChessActions, that the test case should deliver.
+        List<ChessAction> expectedActions = new ArrayList<>();
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(5, 5)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(8, 8)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(9, 10)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(10, 12)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(9, 7)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(11, 8)));
+        expectedActions.add(bishopMoves.captureEnemy(whiteBishop, blackBishop, Position2D.of(8, 5)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(6, 4)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(5, 2)));
+        expectedActions.add(bishopMoves.moveTo(whiteBishop, Position2D.of(4, 0)));
+
+        assertEquals(possibleActions.size(), expectedActions.size());
+
+        for (ChessAction expected : expectedActions) {
+            assertTrue(possibleActions.contains(expected));
+        }
 
     }
 
 
     /**
-     * Test the right behavior of the bishop when positioned at the border of the gameboard. Checks if the number of
-     * returned possible {@link ChessAction} from {@link BishopMovementPattern} equals the expected number (manually checked)
-     * of {@link ChessAction}.
+     * Test the right behavior of the bishop when positioned at the border of the gameboard. Checks if the expected
+     * {@link ChessAction} (manually checked) are equal to those returned by
+     * {@link BishopMovementPattern#getPossibleActions(Figure, Gameboard)}.
      *
      * @throws Exception
      */
@@ -75,12 +94,59 @@ public class BishopMovementPatternTest {
         HexagonalGameboard gameboard = figureSetter.createGameboard();
 
         Figure blackBishop = gameboard.getFigure(Position2D.of(5, 12)).get();
+        Figure whitePawn = gameboard.getFigure(Position2D.of(3, 8)).get();
 
-        BishopMovementPattern bishopMoves = new BishopMovementPattern(BishopMovementPattern.RANGE_UNLIMITED);
+        BishopMovementPattern bishopMoves = new BishopMovementPattern();
         List<ChessAction> possibleActions = bishopMoves.getPossibleActions(blackBishop, gameboard);
 
-        // Test the sum of the possible ChessActions in each direction.
-        assertEquals(0 + 0 + 0 + 0 + 2 + 2, possibleActions.size());
+        // Create a manually checked list of ChessActions, that the test case should deliver.
+        List<ChessAction> expectedActions = new ArrayList<>();
+        expectedActions.add(bishopMoves.moveTo(blackBishop, Position2D.of(4, 10)));
+        expectedActions.add(bishopMoves.captureEnemy(blackBishop, whitePawn, Position2D.of(3, 8)));
+        expectedActions.add(bishopMoves.moveTo(blackBishop, Position2D.of(6, 11)));
+        expectedActions.add(bishopMoves.moveTo(blackBishop, Position2D.of(7, 10)));
+
+        assertEquals(possibleActions.size(), expectedActions.size());
+
+        for (ChessAction expected : expectedActions) {
+            assertTrue(possibleActions.contains(expected));
+        }
+
+    }
+
+
+    /**
+     * Test the range limitation.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testRangeLimitation() throws Exception {
+        GameboardCreator.FigureSetter figureSetter = new GameboardCreator.FigureSetter();
+
+        // The bishop figure, whose range will be limited to 1.
+        figureSetter.putFigure(Position2D.of(6, 6), DefaultFigures.bishop(HexagonalPlayerType.GRAY));
+
+        HexagonalGameboard gameboard = figureSetter.createGameboard();
+
+        Figure limitedBishop = gameboard.getFigure(Position2D.of(6, 6)).get();
+
+        BishopMovementPattern limitedBishopMoves = new BishopMovementPattern(1);
+        List<ChessAction> possibleActions = limitedBishopMoves.getPossibleActions(limitedBishop, gameboard);
+
+        List<ChessAction> expectedActions = new ArrayList<>();
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(4, 5)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(5, 7)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(7, 8)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(8, 7)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(7, 5)));
+        expectedActions.add(limitedBishopMoves.moveTo(limitedBishop, Position2D.of(5, 4)));
+
+        assertEquals(possibleActions.size(), expectedActions.size());
+
+        for (ChessAction expected : expectedActions) {
+            assertTrue(possibleActions.contains(expected));
+        }
 
     }
 
