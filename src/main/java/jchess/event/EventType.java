@@ -11,5 +11,7 @@ package jchess.event;
 public enum EventType {
 
     FIGURE_MOVED,
-    FIGURE_CAPTURED
+    FIGURE_CAPTURED,
+    FIGURE_SELECTED,
+    ACTION_SELECTED
 }
