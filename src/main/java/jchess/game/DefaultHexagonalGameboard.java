@@ -61,7 +61,7 @@ public class DefaultHexagonalGameboard extends HexagonalGameboard {
         figuresMap.put(Position2D.of(12, 7), DefaultFigures.rook(HexagonalPlayerType.BLACK));
 
         // Gray
-        for (int x = 4, y = 1; x <= 12; x++) {
+        for (int x = 4, y = 11; x <= 12; x++) {
             figuresMap.put(Position2D.of(x, y), DefaultFigures.pawn(HexagonalPlayerType.GRAY));
         }
         figuresMap.put(Position2D.of(5, 12), DefaultFigures.rook(HexagonalPlayerType.GRAY));
