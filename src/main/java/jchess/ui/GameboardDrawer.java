@@ -32,7 +32,7 @@ public class GameboardDrawer extends JComponent {
      * Draws all the fields with the same y value ({@link Position2D}).
      *
      * @param g                         The {@link Graphics} object from the paint method.
-     * @param firstColumnFieldCenter    The center coordinates (in pixels) of the polygon that shall be drawn.
+     * @param firstColumnFieldCenter    The center coordinates (in pixels) of the first polygon that shall be drawn.
      * @param numOfRowsInColumn         The number of elements in the column (elements with the same y value).
      * @param firstPos2D                The {@link Position2D} of the first/top element of the current column.
      */
