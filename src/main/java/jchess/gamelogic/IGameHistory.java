@@ -7,10 +7,16 @@ import java.util.List;
  */
 public interface IGameHistory {
     void addGameState(GameState state);
+
     GameState getCurrentState();
+
     List<GameState> getTurnHistory();
+
     void stepHistoryBackward();
+
     void stepHistoryForward();
+
     String save();
+
     void load(String json);
 }

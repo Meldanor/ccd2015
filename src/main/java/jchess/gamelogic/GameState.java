@@ -2,7 +2,6 @@ package jchess.gamelogic;
 
 import jchess.game.Figure;
 import jchess.game.HexagonalPlayerType;
-import jchess.game.PlayerType;
 import jchess.game.Position2D;
 
 import java.util.List;
@@ -23,12 +22,13 @@ public class GameState {
 
     /**
      * Factorymethod for easy creation of a gamestate
+     *
      * @param figures Map of all Figures and their positions
-     * @param turn Turnnumber
-     * @param player active Players PlayerType
+     * @param turn    Turnnumber
+     * @param player  active Players PlayerType
      * @return
      */
-    public static GameState Create(Map<Position2D,Figure> figures, int turn, HexagonalPlayerType player){
+    public static GameState Create(Map<Position2D, Figure> figures, int turn, HexagonalPlayerType player) {
         GameState state = new GameState();
         Stream<Map.Entry<Position2D, Figure>> figureStream = figures.entrySet().stream();
         Function<Map.Entry<Position2D, Figure>, FigureDescription> mapper = entry -> new FigureDescription(entry.getKey(), entry.getValue().getName(), (HexagonalPlayerType) entry.getValue().getOwner());

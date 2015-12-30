@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *  A Class for Three Player Chess Game Logic.
+ * A Class for Three Player Chess Game Logic.
  */
 public class ThreeWayChessGameLogic implements IGameLogic {
 
@@ -26,7 +26,6 @@ public class ThreeWayChessGameLogic implements IGameLogic {
     private int _turnNumber;
 
     /**
-     *
      * @return List of Players with bool depicting player's king's status.
      */
     @Override
@@ -191,7 +190,6 @@ public class ThreeWayChessGameLogic implements IGameLogic {
     }
 
     /**
-     *
      * @return current active Player
      */
     @Override

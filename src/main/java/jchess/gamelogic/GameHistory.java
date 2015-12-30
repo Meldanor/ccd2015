@@ -1,6 +1,7 @@
 package jchess.gamelogic;
 
 import jchess.util.Json;
+
 import java.util.ArrayList;
 import java.util.List;
 
