@@ -19,7 +19,7 @@ public class FigureSelectedEvent extends Event {
      *
      * @param figure The selected figure.
      */
-    protected FigureSelectedEvent(Figure figure) {
+    public FigureSelectedEvent(Figure figure) {
         super(EventType.FIGURE_SELECTED);
 
         this.figure = figure;

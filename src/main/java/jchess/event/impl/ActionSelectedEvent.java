@@ -13,7 +13,12 @@ public class ActionSelectedEvent extends Event {
 
     private final ChessAction action;
 
-    protected ActionSelectedEvent(ChessAction action) {
+    /**
+     * Create the event
+     *
+     * @param action The action selected by the player from the UI
+     */
+    public ActionSelectedEvent(ChessAction action) {
         super(EventType.ACTION_SELECTED);
 
         this.action = action;
