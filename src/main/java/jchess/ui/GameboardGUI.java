@@ -29,8 +29,8 @@ public class GameboardGUI {
         window.add(new JLabel(new ImageIcon("src/main/resources/jchess/images/chessboard.png")));
 
         // Use the following two lines to draw the gameboard at runtime (on a black background).
-        window.getContentPane().add(new GameboardDrawer());
-        window.getContentPane().setBackground(Color.BLACK);
+//        window.getContentPane().add(new GameboardDrawer());
+//        window.getContentPane().setBackground(Color.BLACK);
 
         window.setVisible(true);
 
@@ -88,17 +88,17 @@ public class GameboardGUI {
     /**
      * Map the {@link HexagonalFieldShape}s of a single row to its appropriate {@link Position2D}s.
      *
-     * @param firstColumnFieldCenter The center coordinates (in pixels) of the first polygon that shall be drawn.
-     * @param numOfElementsInRow     The number of elements in the row (elements with the same x value).
-     * @param firstPos2D             The {@link Position2D} of the first element in the current row.
+     * @param firstRowFieldCenter The center coordinates (in pixels) of the first polygon that shall be drawn.
+     * @param numOfElementsInRow  The number of elements in the row (elements with the same x value).
+     * @param firstPos2D          The {@link Position2D} of the first element in the current row.
      * @return A map ({@link HexagonalFieldShape}, {@link Position2D}) of all the elements in the current row.
      */
-    private static Map mapRow(Point firstColumnFieldCenter, int numOfElementsInRow, Position2D firstPos2D) {
+    private static Map mapRow(Point firstRowFieldCenter, int numOfElementsInRow, Position2D firstPos2D) {
         Map<HexagonalFieldShape, Position2D> map = new HashMap<>();
 
         for (int i = 0; i < numOfElementsInRow; i++) {
             HexagonalFieldShape shape = new HexagonalFieldShape(
-                    new Point((int) firstColumnFieldCenter.getX() + (i * 62), (int) firstColumnFieldCenter.getY()));
+                    new Point((int) firstRowFieldCenter.getX() + (i * 62), (int) firstRowFieldCenter.getY()));
 
             map.put(shape, Position2D.of(firstPos2D.getX(), firstPos2D.getY() + i));
         }
