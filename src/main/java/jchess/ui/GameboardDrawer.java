@@ -13,34 +13,34 @@ import java.awt.*;
 public class GameboardDrawer extends JComponent {
 
     public void paint(Graphics g) {
-        drawColumn(g, new Point(185, 35), 6, Position2D.of(0, 0));
-        drawColumn(g, new Point(247, 35), 7, Position2D.of(0, 1));
-        drawColumn(g, new Point(309, 35), 8, Position2D.of(0, 2));
-        drawColumn(g, new Point(371, 35), 9, Position2D.of(0, 3));
-        drawColumn(g, new Point(433, 35), 10, Position2D.of(0, 4));
-        drawColumn(g, new Point(495, 35), 11, Position2D.of(0, 5));
-        drawColumn(g, new Point(557, 35), 12, Position2D.of(0, 6));
-        drawColumn(g, new Point(619, 35), 13, Position2D.of(0, 7));
-        drawColumn(g, new Point(650, 89), 12, Position2D.of(1, 8));
-        drawColumn(g, new Point(681, 143), 11, Position2D.of(2, 9));
-        drawColumn(g, new Point(712, 197), 10, Position2D.of(3, 10));
-        drawColumn(g, new Point(743, 251), 9, Position2D.of(4, 11));
-        drawColumn(g, new Point(774, 305), 8, Position2D.of(5, 12));
+        drawColumn(g, new Point(185, 35), 8, Position2D.of(0, 0));
+        drawColumn(g, new Point(154, 89), 9, Position2D.of(1, 0));
+        drawColumn(g, new Point(123, 143), 10, Position2D.of(2, 0));
+        drawColumn(g, new Point(92, 197), 11, Position2D.of(3, 0));
+        drawColumn(g, new Point(61, 251), 12, Position2D.of(4, 0));
+        drawColumn(g, new Point(30, 305), 13, Position2D.of(5, 0));
+        drawColumn(g, new Point(61, 359), 12, Position2D.of(6, 1));
+        drawColumn(g, new Point(92, 413), 11, Position2D.of(7, 2));
+        drawColumn(g, new Point(123, 467), 10, Position2D.of(8, 3));
+        drawColumn(g, new Point(154, 521), 9, Position2D.of(9, 4));
+        drawColumn(g, new Point(185, 575), 8, Position2D.of(10, 5));
+        drawColumn(g, new Point(216, 629), 7, Position2D.of(11, 6));
+        drawColumn(g, new Point(247, 683), 6, Position2D.of(12, 7));
     }
 
     /**
-     * Draws all the fields with the same y value ({@link Position2D}).
+     * Draws all the fields with the same x value ({@link Position2D}).
      *
-     * @param g                         The {@link Graphics} object from the paint method.
-     * @param firstColumnFieldCenter    The center coordinates (in pixels) of the first polygon that shall be drawn.
-     * @param numOfRowsInColumn         The number of elements in the column (elements with the same y value).
-     * @param firstPos2D                The {@link Position2D} of the first/top element of the current column.
+     * @param g                      The {@link Graphics} object from the paint method.
+     * @param firstColumnFieldCenter The center coordinates (in pixels) of the first polygon that shall be drawn.
+     * @param numOfElementsInRow     The number of elements in the row (elements with the same x value).
+     * @param firstPos2D             The {@link Position2D} of the first element in the current row.
      */
-    public void drawColumn(Graphics g, Point firstColumnFieldCenter, int numOfRowsInColumn, Position2D firstPos2D) {
+    public void drawColumn(Graphics g, Point firstColumnFieldCenter, int numOfElementsInRow, Position2D firstPos2D) {
 
-        for (int i = 0; i < numOfRowsInColumn; i++) {
-            HexagonalFieldShape shape = new HexagonalFieldShape(new Point(
-                    (int) firstColumnFieldCenter.getX() - (i * 31), (int) firstColumnFieldCenter.getY() + (i * 54)));
+        for (int i = 0; i < numOfElementsInRow; i++) {
+            HexagonalFieldShape shape = new HexagonalFieldShape(
+                    new Point((int) firstColumnFieldCenter.getX() + (i * 62), (int) firstColumnFieldCenter.getY()));
 
             if ((i + firstPos2D.getX() + firstPos2D.getY()) % 3 == 0)
                 g.setColor(new Color(222, 255, 214));

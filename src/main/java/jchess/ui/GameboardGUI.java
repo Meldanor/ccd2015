@@ -29,25 +29,25 @@ public class GameboardGUI {
         window.add(new JLabel(new ImageIcon("src/main/resources/jchess/images/chessboard.png")));
 
         // Use the following two lines to draw the gameboard at runtime (on a black background).
-//        window.getContentPane().add(new GameboardDrawer());
-//        window.getContentPane().setBackground(Color.BLACK);
+        window.getContentPane().add(new GameboardDrawer());
+        window.getContentPane().setBackground(Color.BLACK);
 
         window.setVisible(true);
 
         shapePosition = new HashMap<>();
-        shapePosition.putAll(mapColumn(new Point(185, 35), 6, Position2D.of(0, 0)));
-        shapePosition.putAll(mapColumn(new Point(247, 35), 7, Position2D.of(0, 1)));
-        shapePosition.putAll(mapColumn(new Point(309, 35), 8, Position2D.of(0, 2)));
-        shapePosition.putAll(mapColumn(new Point(371, 35), 9, Position2D.of(0, 3)));
-        shapePosition.putAll(mapColumn(new Point(433, 35), 10, Position2D.of(0, 4)));
-        shapePosition.putAll(mapColumn(new Point(495, 35), 11, Position2D.of(0, 5)));
-        shapePosition.putAll(mapColumn(new Point(557, 35), 12, Position2D.of(0, 6)));
-        shapePosition.putAll(mapColumn(new Point(619, 35), 13, Position2D.of(0, 7)));
-        shapePosition.putAll(mapColumn(new Point(650, 89), 12, Position2D.of(1, 8)));
-        shapePosition.putAll(mapColumn(new Point(681, 143), 11, Position2D.of(2, 9)));
-        shapePosition.putAll(mapColumn(new Point(712, 197), 10, Position2D.of(3, 10)));
-        shapePosition.putAll(mapColumn(new Point(743, 251), 9, Position2D.of(4, 11)));
-        shapePosition.putAll(mapColumn(new Point(774, 305), 8, Position2D.of(5, 12)));
+        shapePosition.putAll(mapRow(new Point(185, 35), 8, Position2D.of(0, 0)));
+        shapePosition.putAll(mapRow(new Point(154, 89), 9, Position2D.of(1, 0)));
+        shapePosition.putAll(mapRow(new Point(123, 143), 10, Position2D.of(2, 0)));
+        shapePosition.putAll(mapRow(new Point(92, 197), 11, Position2D.of(3, 0)));
+        shapePosition.putAll(mapRow(new Point(61, 251), 12, Position2D.of(4, 0)));
+        shapePosition.putAll(mapRow(new Point(30, 305), 13, Position2D.of(5, 0)));
+        shapePosition.putAll(mapRow(new Point(61, 359), 12, Position2D.of(6, 1)));
+        shapePosition.putAll(mapRow(new Point(92, 413), 11, Position2D.of(7, 2)));
+        shapePosition.putAll(mapRow(new Point(123, 467), 10, Position2D.of(8, 3)));
+        shapePosition.putAll(mapRow(new Point(154, 521), 9, Position2D.of(9, 4)));
+        shapePosition.putAll(mapRow(new Point(185, 575), 8, Position2D.of(10, 5)));
+        shapePosition.putAll(mapRow(new Point(216, 629), 7, Position2D.of(11, 6)));
+        shapePosition.putAll(mapRow(new Point(247, 683), 6, Position2D.of(12, 7)));
 
         window.getContentPane().addMouseListener(new MouseListener() {
 
@@ -66,7 +66,7 @@ public class GameboardGUI {
                 for (Map.Entry<HexagonalFieldShape, Position2D> entry : shapePosition.entrySet()) {
                     if (entry.getKey().contains(e.getX(), e.getY())) {
                         System.out.println("Position2D: " + entry.getValue().getX() + " " + entry.getValue().getY());
-                        return;
+                        break;
                     }
                 }
             }
@@ -86,21 +86,21 @@ public class GameboardGUI {
 
 
     /**
-     * Map the {@link HexagonalFieldShape}s of a single column to its appropriate {@link Position2D}s.
+     * Map the {@link HexagonalFieldShape}s of a single row to its appropriate {@link Position2D}s.
      *
      * @param firstColumnFieldCenter The center coordinates (in pixels) of the first polygon that shall be drawn.
-     * @param numOfRowsInColumn      The number of elements in the column (elements with the same y value).
-     * @param firstPos2D             The {@link Position2D} of the first/top element of the current column.
-     * @return A map ({@link HexagonalFieldShape}, {@link Position2D}) of all the elements in the current column.
+     * @param numOfElementsInRow     The number of elements in the row (elements with the same x value).
+     * @param firstPos2D             The {@link Position2D} of the first element in the current row.
+     * @return A map ({@link HexagonalFieldShape}, {@link Position2D}) of all the elements in the current row.
      */
-    private static Map mapColumn(Point firstColumnFieldCenter, int numOfRowsInColumn, Position2D firstPos2D) {
+    private static Map mapRow(Point firstColumnFieldCenter, int numOfElementsInRow, Position2D firstPos2D) {
         Map<HexagonalFieldShape, Position2D> map = new HashMap<>();
 
-        for (int i = 0; i < numOfRowsInColumn; i++) {
-            HexagonalFieldShape shape = new HexagonalFieldShape(new Point(
-                    (int) firstColumnFieldCenter.getX() - (i * 31), (int) firstColumnFieldCenter.getY() + (i * 54)));
+        for (int i = 0; i < numOfElementsInRow; i++) {
+            HexagonalFieldShape shape = new HexagonalFieldShape(
+                    new Point((int) firstColumnFieldCenter.getX() + (i * 62), (int) firstColumnFieldCenter.getY()));
 
-            map.put(shape, Position2D.of(firstPos2D.getX() + i, firstPos2D.getY()));
+            map.put(shape, Position2D.of(firstPos2D.getX(), firstPos2D.getY() + i));
         }
 
         return map;
