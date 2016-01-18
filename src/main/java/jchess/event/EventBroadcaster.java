@@ -43,7 +43,7 @@ public class EventBroadcaster {
      *
      * @param event The event containing the information of the event.
      */
-    static void triggerEvent(Event event) {
+    public static void triggerEvent(Event event) {
         for (Consumer<Event> action : INSTANCE.observers.get(event.getEventType())) {
             action.accept(event);
         }

@@ -1,10 +1,13 @@
 package jchess.ui;
 
+import jchess.event.EventBroadcaster;
+import jchess.event.impl.PositionClickedEvent;
 import jchess.game.*;
 import jchess.game.movement.ChessAction;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -197,8 +200,10 @@ public class HexagonalGameboardGUI {
                     if (entry.getKey().contains(e.getX(), e.getY())) {
                         System.out.println("Position2D: " + entry.getValue().getX() + " " + entry.getValue().getY());
 
-                        // TODO: Start an event (sending Position2D)
+                        Position2D pos = Position2D.of(entry.getValue().getX(), entry.getValue().getY());
 
+                        PositionClickedEvent eve = new PositionClickedEvent(pos);
+                        EventBroadcaster.triggerEvent(eve);
                         break;
                     }
                 }

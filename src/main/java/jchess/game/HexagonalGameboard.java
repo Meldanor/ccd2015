@@ -1,6 +1,9 @@
 package jchess.game;
 
+import jchess.event.impl.ActionSelectedEvent;
+
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -11,7 +14,7 @@ import java.util.stream.Stream;
  *
  * @since 03.11.2015
  */
-public class HexagonalGameboard implements Gameboard<Position2D> {
+public class HexagonalGameboard implements Gameboard<Position2D>, Consumer<ActionSelectedEvent> {
 
     private static Figure EMPTY_SPACE = new FigureBuilder<>("", null, () -> 0).build();
 
@@ -116,4 +119,8 @@ public class HexagonalGameboard implements Gameboard<Position2D> {
     }
 
 
+    @Override
+    public void accept(ActionSelectedEvent actionEvent) {
+
+    }
 }
