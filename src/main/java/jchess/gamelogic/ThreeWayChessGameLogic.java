@@ -143,15 +143,15 @@ public class ThreeWayChessGameLogic implements IGameLogic {
 
     /**
      * @param player the Player whose figurelist is filtered for the king
-     * @return true if there is no king in players figurelist.
+     * @return true if a king is found in players figurelist.
      */
-    boolean isKingDead(HexagonalPlayerType player) {
+    boolean hasPlayerKingFigure(HexagonalPlayerType player) {
         Stream<Figure> figures = gameBoard.getAllFigures().values().stream();
 
-        boolean isKingAlive = figures.filter(figure -> figure.getOwner() == player)
+        boolean isKingPresent = figures.filter(figure -> figure.getOwner() == player)
                 .anyMatch(figure -> figure.getType() == FigureType.KING);
 
-        return !isKingAlive;
+        return isKingPresent;
 
     }
 
@@ -166,7 +166,7 @@ public class ThreeWayChessGameLogic implements IGameLogic {
         turnNumber++;
 
         Stream<HexagonalPlayerType> players = this.players.keySet().stream();
-        players.forEach(player -> this.players.put(player, !isKingDead(player)));
+        players.forEach(player -> this.players.put(player, hasPlayerKingFigure(player)));
 
         GameState state = GameState.Create(gameBoard.getAllFigures(), turnNumber, activePlayer);
         gameHistory.addGameState(state);
