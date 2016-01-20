@@ -4,6 +4,7 @@ import jchess.game.*;
 import jchess.game.movement.ChessAction;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ public interface IGameLogic {
     Map<HexagonalPlayerType, Boolean> getPlayerInformation();
 
     /**
-     *
+     * Method to initialize GameBoard with Figures, PlayerOrder, Turnnumber
      */
     void initializeGame();
 
@@ -48,7 +49,7 @@ public interface IGameLogic {
     /**
      * @return List of all ChessActions a Figure can do.
      */
-    ArrayList<ChessAction> getPossibleMoves();
+    List<ChessAction> getPossibleMoves();
 
     PlayerType getCurrentPlayer();
 
