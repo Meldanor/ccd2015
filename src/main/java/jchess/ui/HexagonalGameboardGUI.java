@@ -1,6 +1,8 @@
 package jchess.ui;
 
 import jchess.event.EventBroadcaster;
+import jchess.event.EventType;
+import jchess.event.impl.FigureSelectedEvent;
 import jchess.event.impl.PositionClickedEvent;
 import jchess.game.*;
 import jchess.game.movement.ChessAction;
@@ -39,6 +41,10 @@ public class HexagonalGameboardGUI {
 
         createMappings();
         frameInitialization();
+
+        //Event-Handling for the GUI
+        EventBroadcaster.register(EventType.FIGURE_SELECTED, (FigureSelectedEvent event) -> showPossibleActions(event.getFigurePosition(), event.getPossibleActions()));
+
     }
 
 
@@ -75,7 +81,7 @@ public class HexagonalGameboardGUI {
 
         JLabel background = new JLabel(backgroundImage);
         background.setBounds(0, 0, width, height);
-        pane.add(background, new Integer(0), 0);
+        pane.add(background, 0, 0);
 
         Map<Position2D, Figure> figures = chessboard.getAllFigures();
 
@@ -181,7 +187,8 @@ public class HexagonalGameboardGUI {
      * @return MouseListener for the gameboard.
      */
     private MouseListener getMouseListener() {
-        MouseListener listener = new MouseListener() {
+
+        return new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -202,8 +209,8 @@ public class HexagonalGameboardGUI {
 
                         Position2D pos = Position2D.of(entry.getValue().getX(), entry.getValue().getY());
 
-                        PositionClickedEvent eve = new PositionClickedEvent(pos);
-                        EventBroadcaster.triggerEvent(eve);
+                        new PositionClickedEvent(pos).trigger();
+
                         break;
                     }
                 }
@@ -222,8 +229,6 @@ public class HexagonalGameboardGUI {
 
             }
         };
-
-        return listener;
     }
 
 
@@ -267,5 +272,4 @@ public class HexagonalGameboardGUI {
         }
 
     }
-
 }

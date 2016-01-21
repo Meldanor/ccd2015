@@ -3,6 +3,7 @@ package jchess.event.impl;
 import jchess.event.Event;
 import jchess.event.EventType;
 import jchess.game.Figure;
+import jchess.game.Position2D;
 import jchess.game.movement.ChessAction;
 
 import java.util.List;
@@ -14,19 +15,19 @@ import java.util.List;
  */
 public class FigureSelectedEvent extends Event {
 
-    private final Figure figure;
+    private final Position2D figurePos;
     private final List<ChessAction> possibleActions;
 
     /**
      * Create the event.
      *
-     * @param figure The selected figure.
+     * @param pos The position of the selected figure.
      * @param possibleActions The possible actions of the selected figure.
      */
-    public FigureSelectedEvent(Figure figure, List<ChessAction> possibleActions) {
+    public FigureSelectedEvent(Position2D pos, List<ChessAction> possibleActions) {
         super(EventType.FIGURE_SELECTED);
 
-        this.figure = figure;
+        this.figurePos = pos;
         this.possibleActions = possibleActions;
     }
 
@@ -34,7 +35,7 @@ public class FigureSelectedEvent extends Event {
      *
      * @return The selected figure.
      */
-    public Figure getFigure(){return figure;}
+    public Position2D getFigurePosition(){return figurePos;}
 
     /**
      *
@@ -44,6 +45,6 @@ public class FigureSelectedEvent extends Event {
 
     @Override
     public String toString() {
-        return "FigureSelectedEvent{figure=" + figure + "} " + super.toString();
+        return "FigureSelectedEvent{figurePos=" + figurePos + "; possibleActions= " + possibleActions + "} " + super.toString();
     }
 }
