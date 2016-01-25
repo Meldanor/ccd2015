@@ -1,7 +1,8 @@
 package jchess;
 
-import jchess.game.DefaultHexagonalGameboard;
 import jchess.game.HexagonalGameboard;
+import jchess.gamelogic.IGameLogic;
+import jchess.gamelogic.ThreeWayChessGameLogic;
 import jchess.ui.HexagonalGameboardGUI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,10 +19,12 @@ public class Core {
         LOGGER.info(() -> "JChess 2.0 by Dash");
         LOGGER.info(() -> "Starting game");
 
-        HexagonalGameboardGUI gui = new HexagonalGameboardGUI();
+        IGameLogic logic = new ThreeWayChessGameLogic();
+        logic.initializeGame();
 
-        HexagonalGameboard gameboard = new DefaultHexagonalGameboard();
-        gui.drawGameboardState(gameboard);
+
+        HexagonalGameboardGUI gui = new HexagonalGameboardGUI();
+        gui.drawGameboardState((HexagonalGameboard) logic.getGameBoard());
 
     }
 }
