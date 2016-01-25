@@ -1,5 +1,10 @@
 package jchess.gamelogic;
 
+import jchess.event.EventBroadcaster;
+import jchess.event.EventType;
+import jchess.event.impl.FigureSelectedEvent;
+import jchess.event.impl.GameboardUpdatedEvent;
+import jchess.event.impl.PositionClickedEvent;
 import jchess.game.*;
 import jchess.game.movement.ChessAction;
 import jchess.game.movement.MovementPattern;
@@ -46,14 +51,17 @@ public class ThreeWayChessGameLogic implements IGameLogic {
         /**
          * TODO: GameboardFactory with capability to build a board from a gamehistory (json)
          */
+        EventBroadcaster.register(EventType.POSITION_CLICKED, (PositionClickedEvent event) -> onBoardTileSelected(event.getPosition()));
+
         gameBoard = new DefaultHexagonalGameboard();
         gameHistory = new GameHistory();
-        players = new LinkedHashMap<HexagonalPlayerType, Boolean>();
+        players = new LinkedHashMap<>();
         players.put(HexagonalPlayerType.WHITE, Boolean.TRUE);
         players.put(HexagonalPlayerType.BLACK, Boolean.TRUE);
         players.put(HexagonalPlayerType.GRAY, Boolean.TRUE);
         playerIterator = players.entrySet().iterator();
         turnNumber = 0;
+        new GameboardUpdatedEvent(gameBoard).trigger();
         nextTurn();
     }
 
@@ -114,22 +122,27 @@ public class ThreeWayChessGameLogic implements IGameLogic {
             /**
              * if no Figure was selected, save selected tile/figure;
              * if selected tile/figure is not a figure, user clicked on empty tile, do nothing
-             * we now know a figure was selected, safe selectedFigure
+             * we now know a figure was selected, save selectedFigure
              * if player is not owner of selected figure, do nothing.
              * now the only possibility is that the Figure is his own, set activeFigure to selectedFigure
              */
             Optional<Figure> selected = gameBoard.getFigure(tile);
             if (!selected.isPresent()) return;
+
             Figure selectedFigure = selected.get();
             if (selectedFigure.getOwner() != activePlayer) return;
+
             activeFigure = selectedFigure;
+            new FigureSelectedEvent(tile, getPossibleMoves()).trigger();
         } else {
+
             /**
              * An activeFigure was selected now check for possible Actions
              */
             boolean isValidMove = getPossibleMoves().stream().anyMatch(chessaction -> chessaction.getEndPosition() == tile);
             if (isValidMove) {
                 gameBoard.moveTo(gameBoard.getPositionOf(activeFigure), tile);
+                new GameboardUpdatedEvent(gameBoard).trigger();
                 nextTurn();
             }
             /**
@@ -137,6 +150,7 @@ public class ThreeWayChessGameLogic implements IGameLogic {
              */
             else {
                 activeFigure = null;
+                new FigureSelectedEvent(null, null).trigger();
             }
         }
     }
@@ -148,10 +162,8 @@ public class ThreeWayChessGameLogic implements IGameLogic {
     boolean hasPlayerKingFigure(HexagonalPlayerType player) {
         Stream<Figure> figures = gameBoard.getAllFigures().values().stream();
 
-        boolean isKingPresent = figures.filter(figure -> figure.getOwner() == player)
+        return figures.filter(figure -> figure.getOwner() == player)
                 .anyMatch(figure -> figure.getType() == FigureType.KING);
-
-        return isKingPresent;
 
     }
 

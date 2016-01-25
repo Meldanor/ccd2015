@@ -3,6 +3,7 @@ package jchess.ui;
 import jchess.event.EventBroadcaster;
 import jchess.event.EventType;
 import jchess.event.impl.FigureSelectedEvent;
+import jchess.event.impl.GameboardUpdatedEvent;
 import jchess.event.impl.PositionClickedEvent;
 import jchess.game.*;
 import jchess.game.movement.ChessAction;
@@ -43,8 +44,14 @@ public class HexagonalGameboardGUI {
         frameInitialization();
 
         //Event-Handling for the GUI
-        EventBroadcaster.register(EventType.FIGURE_SELECTED, (FigureSelectedEvent event) -> showPossibleActions(event.getFigurePosition(), event.getPossibleActions()));
-
+        EventBroadcaster.register(EventType.FIGURE_SELECTED, (FigureSelectedEvent event) -> {
+            if (event.getFigurePosition() == null) {
+                hidePossibleActions();
+                return;
+            }
+            showPossibleActions(event.getFigurePosition(), event.getPossibleActions());
+        });
+        EventBroadcaster.register(EventType.GAMEBOARD_UPDATED, (GameboardUpdatedEvent event) -> drawGameboardState((HexagonalGameboard) event.getGameboard()));
     }
 
 
@@ -112,6 +119,7 @@ public class HexagonalGameboardGUI {
      * @param possibleActions The possible actions for the clicked figure.
      */
     public void showPossibleActions(Position2D figurePosition, List<ChessAction> possibleActions) {
+        hidePossibleActions();
         JLabel activeFigureOverlay = drawGameboardOverlay(figurePosition, "Overlay-Active.png", 1);
         currentlyDrawnPossibleActions.add(activeFigureOverlay);
 
