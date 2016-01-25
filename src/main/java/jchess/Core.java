@@ -3,14 +3,20 @@ package jchess;
 import jchess.game.DefaultHexagonalGameboard;
 import jchess.game.HexagonalGameboard;
 import jchess.ui.HexagonalGameboardGUI;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The entrance of the program.
  * @since 02.12.2015
  */
 public class Core {
+
+    public static final Logger LOGGER = LogManager.getLogger("Dash");
+
     public static void main(String[] args) {
-        System.out.println("Hello World, this is JChess 2.0 by Dash!");
+        LOGGER.info(() -> "JChess 2.0 by Dash");
+        LOGGER.info(() -> "Starting game");
 
         HexagonalGameboardGUI gui = new HexagonalGameboardGUI();
 

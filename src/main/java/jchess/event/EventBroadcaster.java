@@ -1,5 +1,7 @@
 package jchess.event;
 
+import jchess.Core;
+
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,7 @@ public class EventBroadcaster {
      */
     @SuppressWarnings("unchecked")
     public static void register(EventType type, Consumer<? extends Event> action) {
+        Core.LOGGER.debug(() -> "Consumer registered for event type " + type);
         INSTANCE.observers.get(type).add((Consumer<Event>) action);
     }
 
@@ -44,7 +47,10 @@ public class EventBroadcaster {
      * @param event The event containing the information of the event.
      */
     public static void triggerEvent(Event event) {
-        for (Consumer<Event> action : INSTANCE.observers.get(event.getEventType())) {
+        List<Consumer<Event>> consumers = INSTANCE.observers.get(event.getEventType());
+        Core.LOGGER.debug(() -> "Trigger event " + event.getEventType() + " for "
+            + consumers.size() + " observer. Event=" + event);
+        for (Consumer<Event> action : consumers) {
             action.accept(event);
         }
     }

@@ -1,5 +1,6 @@
 package jchess.ui;
 
+import jchess.Core;
 import jchess.event.EventBroadcaster;
 import jchess.event.EventType;
 import jchess.event.impl.FigureSelectedEvent;
@@ -213,7 +214,7 @@ public class HexagonalGameboardGUI {
 
                 for (Map.Entry<HexagonalFieldShape, Position2D> entry : positionByShape.entrySet()) {
                     if (entry.getKey().contains(e.getX(), e.getY())) {
-                        System.out.println("Position2D: " + entry.getValue().getX() + " " + entry.getValue().getY());
+                        Core.LOGGER.debug(() -> "Position2D: " + entry.getValue().getX() + " " + entry.getValue().getY());
 
                         Position2D pos = Position2D.of(entry.getValue().getX(), entry.getValue().getY());
 
