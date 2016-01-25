@@ -5,6 +5,7 @@ import com.owlike.genson.GensonBuilder;
 import com.owlike.genson.JsonBindingException;
 import com.owlike.genson.reflect.VisibilityFilter;
 import com.owlike.genson.stream.JsonStreamException;
+import jchess.game.Position2D;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Json {
             .useConstructorWithArguments(true)
             .useFields(true, VisibilityFilter.PRIVATE)
             .useMethods(false, VisibilityFilter.ALL)
+            .withDeserializer(new Position2DDeserializer(), Position2D.class)
             .create();
 
     /**

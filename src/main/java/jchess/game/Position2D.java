@@ -17,7 +17,7 @@ public final class Position2D implements Position {
     private final int x;
     private final int y;
 
-    public Position2D(int x, int y) {
+    private Position2D(int x, int y) {
         this.x = x;
         this.y = y;
     }
