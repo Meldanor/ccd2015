@@ -86,7 +86,7 @@ public class HexagonalGameboardGUI {
         ImageIcon backgroundImage = new ImageIcon("src/main/resources/jchess/images/chessboard.png");
         int width = backgroundImage.getIconWidth();
         int height = backgroundImage.getIconHeight();
-
+        pane.removeAll();
         JLabel background = new JLabel(backgroundImage);
         background.setBounds(0, 0, width, height);
         pane.add(background, 0, 0);
@@ -95,7 +95,7 @@ public class HexagonalGameboardGUI {
 
         for (Map.Entry<Position2D, Figure> entry : figures.entrySet()) {
             Figure figure = entry.getValue();
-            Position2D figurePosition = chessboard.getPositionOf(figure);
+            Position2D figurePosition = entry.getKey();
 
             String file = figure.getName() + "-";
             if (figure.getOwner() == HexagonalPlayerType.BLACK) {
@@ -164,6 +164,7 @@ public class HexagonalGameboardGUI {
 
         JLabel overlay = createJLabel(image, center);
         pane.add(overlay, new Integer(layer));
+
 
         pane.revalidate();
         pane.repaint();
