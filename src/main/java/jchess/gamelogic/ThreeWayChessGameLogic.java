@@ -46,14 +46,19 @@ public class ThreeWayChessGameLogic implements IGameLogic {
      * initialize Turnnumber (turn 1 will be stored with nextTurn())
      * nextTurn() sets activePlayer, increases turnNumber and will fill gameHistory with first GameState
      */
-    @Override
-    public void initializeGame() {
+
+    public void initializeGame(boolean useDebugBoard) {
         /**
          * TODO: GameboardFactory with capability to build a board from a gamehistory (json)
          */
-        EventBroadcaster.register(EventType.POSITION_CLICKED, (PositionClickedEvent event) -> onBoardTileSelected(event.getPosition()));
 
-        gameBoard = new DefaultHexagonalGameboard();
+        EventBroadcaster.register(EventType.POSITION_CLICKED, (PositionClickedEvent event) -> onBoardTileSelected(event.getPosition()));
+        if (!useDebugBoard) {
+            gameBoard = new DefaultHexagonalGameboard();
+        } else {
+            gameBoard = new DebugHexagonalGameboard();
+        }
+
         gameHistory = new GameHistory();
         players = new LinkedHashMap<>();
         players.put(HexagonalPlayerType.WHITE, Boolean.TRUE);
@@ -63,6 +68,19 @@ public class ThreeWayChessGameLogic implements IGameLogic {
         turnNumber = 0;
         new GameboardUpdatedEvent(gameBoard).trigger();
         nextTurn();
+    }
+
+    /**
+     * initialize Board and set Figures (currently done with DefaultHexagonalGameboard)
+     * initialize GameHistory
+     * initialize Order of Players (insertion-order)
+     * initialize Turnnumber (turn 1 will be stored with nextTurn())
+     * nextTurn() sets activePlayer, increases turnNumber and will fill gameHistory with first GameState
+     */
+
+    @Override
+    public void initializeGame() {
+        initializeGame(false);
     }
 
     /**
@@ -107,7 +125,7 @@ public class ThreeWayChessGameLogic implements IGameLogic {
     /**
      * Eventhandler for Tileselection
      *
-     * @param tile The Tile ID. Can be null, if no tile is selected.
+     * @param tile The selected Tile Position. Can be null, if no tile is selected.
      */
     @Override
     public void onBoardTileSelected(Position2D tile) {
@@ -119,39 +137,62 @@ public class ThreeWayChessGameLogic implements IGameLogic {
          * Check if a Figure was already selected
          */
         if (activeFigure == null) {
-            /**
-             * if no Figure was selected, save selected tile/figure;
-             * if selected tile/figure is not a figure, user clicked on empty tile, do nothing
-             * we now know a figure was selected, save selectedFigure
-             * if player is not owner of selected figure, do nothing.
-             * now the only possibility is that the Figure is his own, set activeFigure to selectedFigure
-             */
-            Optional<Figure> selected = gameBoard.getFigure(tile);
-            if (!selected.isPresent()) return;
 
-            Figure selectedFigure = selected.get();
-            if (selectedFigure.getOwner() != activePlayer) return;
+            checkFreshTile(tile);
 
-            activeFigure = selectedFigure;
-            new FigureSelectedEvent(tile, getPossibleMoves()).trigger();
         } else {
 
-            /**
-             * An activeFigure was selected now check for possible Actions
-             */
-            boolean isValidMove = getPossibleMoves().stream().anyMatch(chessaction -> chessaction.getEndPosition() == tile);
-            if (isValidMove) {
-                gameBoard.moveTo(gameBoard.getPositionOf(activeFigure), tile);
-                new GameboardUpdatedEvent(gameBoard).trigger();
-                nextTurn();
-            }
-            /**
-             * If not a valid move, deselect figure
-             */
-            else {
-                activeFigure = null;
-                new FigureSelectedEvent(null, null).trigger();
-            }
+            checkTileWithSelectedActiveFigure(tile);
+        }
+    }
+
+    /**
+     * Refactoring according to code-review (Team Rook) comment.
+     * Checklist:
+     * (1)if no Figure was selected (activeFigure == null in onBoardTileSelected()), save selected tile/figure
+     * (2)if selected tile/figure is not a figure, user clicked on empty tile, do nothing
+     * (3)we now know a figure was selected, save selectedFigure
+     * (4)if player is not owner of selected figure, do nothing.
+     * (5)now the only possibility is that the Figure is his own, set activeFigure to selectedFigure
+     *
+     * @param tile The selected Tile Position.
+     */
+    private void checkFreshTile(Position2D tile) {
+        //(1)
+        Optional<Figure> selected = gameBoard.getFigure(tile);
+        //(2)
+        if (!selected.isPresent()) return;
+        //(3)
+        Figure selectedFigure = selected.get();
+        //(4)
+        if (selectedFigure.getOwner() != activePlayer) return;
+        //(5)
+        activeFigure = selectedFigure;
+        new FigureSelectedEvent(tile, getPossibleMoves()).trigger();
+    }
+
+    /**
+     * Refactoring according to code-review (Team Rook) comment.
+     * A Figure was selected (activeFigure).
+     * Now check for it's possible Actions.
+     *
+     * @param tile The selected Tile Position.
+     */
+    private void checkTileWithSelectedActiveFigure(Position2D tile) {
+
+        boolean isValidMove = getPossibleMoves().stream().anyMatch(chessaction -> chessaction.getEndPosition() == tile);
+        if (isValidMove) {
+            gameBoard.moveTo(gameBoard.getPositionOf(activeFigure), tile);
+            new GameboardUpdatedEvent(gameBoard).trigger();
+            nextTurn();
+        }
+        /**
+         * If not a valid move, deselect figure
+         * TODO: improve deselection with automatic reselection at click on samecoloured Figures.
+         */
+        else {
+            activeFigure = null;
+            new FigureSelectedEvent(null, null).trigger();
         }
     }
 
@@ -173,12 +214,13 @@ public class ThreeWayChessGameLogic implements IGameLogic {
      * Also create a new GameState and add it to the gameHistory.
      */
     private void nextTurn() {
-        activePlayer = getNextActivePlayer();
         activeFigure = null;
         turnNumber++;
 
         Stream<HexagonalPlayerType> players = this.players.keySet().stream();
         players.forEach(player -> this.players.put(player, hasPlayerKingFigure(player)));
+
+        activePlayer = getNextActivePlayer();
 
         GameState state = GameState.Create(gameBoard.getAllFigures(), turnNumber, activePlayer);
         gameHistory.addGameState(state);
