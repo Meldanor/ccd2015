@@ -6,29 +6,40 @@ import jchess.event.EventType;
 import jchess.event.impl.FigureSelectedEvent;
 import jchess.event.impl.GameboardUpdatedEvent;
 import jchess.event.impl.PositionClickedEvent;
-import jchess.game.*;
+import jchess.game.Figure;
+import jchess.game.HexagonalGameboard;
+import jchess.game.HexagonalPlayerType;
+import jchess.game.Position2D;
 import jchess.game.movement.ChessAction;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
-
-import javax.swing.*;
+import java.util.Map;
 
 /**
  * GUI for a hexagonal chessboard gameboard.
  */
 public class HexagonalGameboardGUI {
 
+    private static final String IMAGE_BASE = "src/main/resources/jchess/images/";
+    private static final String BACKGROUND_IMAGE = IMAGE_BASE + "chessboard.png";
+    private static final String IMAGE_OVERLAY_ACTION = "Overlay-Active.png";
+    private static final String IMAGE_OVERLAY_MOVE = "Overlay-Moves.png";
+
     private JLayeredPane pane;
     private JFrame window;
     private Map<HexagonalFieldShape, Position2D> positionByShape;
     private Map<Position2D, Point> pointByPosition;
     private List<Component> currentlyDrawnPossibleActions;
+
+    private static final Integer BASE_LAYER = 0;
+    private static final Integer ACTION_LAYER = 1;
+    private static final Integer FIGURE_LAYER = 1;
 
 
     /**
@@ -60,7 +71,7 @@ public class HexagonalGameboardGUI {
      * First initialization of the window for the gameboard.
      */
     private void frameInitialization() {
-        ImageIcon backgroundImage = new ImageIcon("src/main/resources/jchess/images/chessboard.png");
+        ImageIcon backgroundImage = new ImageIcon(BACKGROUND_IMAGE);
         int windowWidth = backgroundImage.getIconWidth();
         int windowHeight = backgroundImage.getIconHeight();
 
@@ -68,7 +79,7 @@ public class HexagonalGameboardGUI {
         double screenWidth = screenSize.getWidth();
         double screenHeight = screenSize.getHeight();
         window.setBounds((int) (screenWidth - windowWidth) / 2, (int) (screenHeight - windowHeight) / 2, windowWidth,
-                windowHeight);
+            windowHeight);
 
         window.setContentPane(pane);
         window.getContentPane().addMouseListener(getMouseListener());
@@ -83,13 +94,13 @@ public class HexagonalGameboardGUI {
      * @param chessboard The chessboard of the current game.
      */
     public void drawGameboardState(HexagonalGameboard chessboard) {
-        ImageIcon backgroundImage = new ImageIcon("src/main/resources/jchess/images/chessboard.png");
+        ImageIcon backgroundImage = new ImageIcon(BACKGROUND_IMAGE);
         int width = backgroundImage.getIconWidth();
         int height = backgroundImage.getIconHeight();
         pane.removeAll();
         JLabel background = new JLabel(backgroundImage);
         background.setBounds(0, 0, width, height);
-        pane.add(background, 0, 0);
+        pane.add(background, 0, BASE_LAYER);
 
         Map<Position2D, Figure> figures = chessboard.getAllFigures();
 
@@ -107,7 +118,7 @@ public class HexagonalGameboardGUI {
             }
             file += ".png";
 
-            drawGameboardOverlay(figurePosition, file, 2);
+            drawGameboardOverlay(figurePosition, file, FIGURE_LAYER);
         }
     }
 
@@ -121,12 +132,12 @@ public class HexagonalGameboardGUI {
      */
     public void showPossibleActions(Position2D figurePosition, List<ChessAction> possibleActions) {
         hidePossibleActions();
-        JLabel activeFigureOverlay = drawGameboardOverlay(figurePosition, "Overlay-Active.png", 1);
+        JLabel activeFigureOverlay = drawGameboardOverlay(figurePosition, IMAGE_OVERLAY_ACTION, ACTION_LAYER);
         currentlyDrawnPossibleActions.add(activeFigureOverlay);
 
         for (ChessAction action : possibleActions) {
             Position2D possibleActionPosition = (Position2D) action.getEndPosition();
-            JLabel possibleActionOverlay = drawGameboardOverlay(possibleActionPosition, "Overlay-Moves.png", 1);
+            JLabel possibleActionOverlay = drawGameboardOverlay(possibleActionPosition, IMAGE_OVERLAY_MOVE, ACTION_LAYER);
             currentlyDrawnPossibleActions.add(possibleActionOverlay);
         }
 
@@ -158,12 +169,12 @@ public class HexagonalGameboardGUI {
      *                 above those with a lower value.
      * @return A {@link JLabel} of the drawn resource.
      */
-    private JLabel drawGameboardOverlay(Position2D position, String file, int layer) {
+    private JLabel drawGameboardOverlay(Position2D position, String file, Integer layer) {
         Point center = pointByPosition.get(position);
-        ImageIcon image = new ImageIcon("src/main/resources/jchess/images/" + file);
+        ImageIcon image = new ImageIcon(IMAGE_BASE + file);
 
         JLabel overlay = createJLabel(image, center);
-        pane.add(overlay, new Integer(layer));
+        pane.add(overlay, layer);
 
 
         pane.revalidate();
